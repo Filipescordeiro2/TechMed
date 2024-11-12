@@ -1,8 +1,10 @@
 package com.br.TechMed.controller.profissional;
 
 import com.br.TechMed.dto.agenda.AgendaDetalhadaDTO;
+import com.br.TechMed.dto.profissional.EspecialidadeProfissionalDTO;
 import com.br.TechMed.dto.profissional.LoginSenhaProfissionalDTO;
 import com.br.TechMed.dto.profissional.ProfissionalDTO;
+import com.br.TechMed.service.servicos.profissional.EspecialidadeProfissionalService;
 import com.br.TechMed.service.servicos.profissional.ProfissionalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +18,15 @@ import java.util.List;
  * Controlador responsável por gerenciar as operações relacionadas aos profissionais no sistema.
  */
 @RestController
-@RequestMapping("/profissionais")
+    @RequestMapping("/profissionais")
 @CrossOrigin(origins = "http://localhost:3000") // Permite apenas o domínio do frontend
 public class ProfissionalController {
 
     @Autowired
     private ProfissionalService profissionalService;
+
+    @Autowired
+    private EspecialidadeProfissionalService especialidadeProfissionalService;
 
     /**
      * Cria um novo profissional.
@@ -64,4 +69,27 @@ public class ProfissionalController {
         List<AgendaDetalhadaDTO> agenda = profissionalService.getAgendaByProfissional(profissionalId, clinicaId, statusAgenda, data, hora, nomeProfissional);
         return ResponseEntity.ok(agenda);
     }
+
+    /**
+     * Retorna a quantidade de profissionais cadastrados.
+     *
+     * @return a quantidade de profissionais cadastrados
+     */
+    @GetMapping("/contar")
+    public ResponseEntity<Long> contarProfissionais() {
+        long quantidadeProfissionais = profissionalService.contarProfissionais();
+        return ResponseEntity.ok(quantidadeProfissionais);
+    }
+
+    @PatchMapping("/inativarProfissional/{id}")
+    public void updateStatus(@PathVariable("id") Long id) {
+        profissionalService.atualizarStatusProfissional(id);
+    }
+
+    @GetMapping("/especialidadesProfissional")
+    public ResponseEntity<List<EspecialidadeProfissionalDTO>> buscarEspecialidadePorProfissionalId(@RequestParam Long profissionalId) {
+        List<EspecialidadeProfissionalDTO> especialidades = especialidadeProfissionalService.buscarEspecialidadePorProfissionalId(profissionalId);
+        return ResponseEntity.ok(especialidades);
+    }
+
 }

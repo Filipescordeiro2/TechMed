@@ -27,21 +27,18 @@ public class EnderecoProfissionalEntity {
      * CEP do endereço.
      */
     @Column(name = "cep_endereco")
-    @NotNull(message = "CEP é obrigatório")
     private String cep;
 
     /**
      * Logradouro do endereço.
      */
     @Column(name = "logradouro_endereco")
-    @NotNull(message = "Logradouro é obrigatório")
     private String logradouro;
 
     /**
      * Número do endereço.
      */
     @Column(name = "numero_endereco")
-    @NotNull(message = "Número é obrigatório")
     private String numero;
 
     /**
@@ -54,28 +51,24 @@ public class EnderecoProfissionalEntity {
      * Bairro do endereço.
      */
     @Column(name = "bairro_endereco")
-    @NotNull(message = "Bairro é obrigatório")
     private String bairro;
 
     /**
      * Cidade do endereço.
      */
-    @Column(name = "cidade_endereco")
-    @NotNull(message = "Cidade é obrigatória")
+
     private String cidade;
 
     /**
      * Estado do endereço.
      */
     @Column(name = "estado_endereco")
-    @NotNull(message = "Estado é obrigatório")
     private String estado;
 
     /**
      * País do endereço.
      */
     @Column(name = "pais_endereco")
-    @NotNull(message = "País é obrigatório")
     private String pais;
 
     /**

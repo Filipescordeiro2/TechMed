@@ -80,6 +80,16 @@ public class ClienteServiceImp implements ClienteService {
     }
 
     /**
+     * Retorna a quantidade de clientes cadastrados.
+     *
+     * @return a quantidade de clientes cadastrados
+     */
+    @Override
+    public long contarClientes() {
+        return clienteRepository.count();
+    }
+
+    /**
      * Converte uma entidade ClienteEntity para um DTO ClienteDTO.
      *
      * @param clienteEntity a entidade do cliente
@@ -88,7 +98,6 @@ public class ClienteServiceImp implements ClienteService {
     private ClienteDTO toDto(ClienteEntity clienteEntity) {
         ClienteDTO clienteDTO = new ClienteDTO();
         clienteDTO.setId(clienteEntity.getId());
-        clienteDTO.setLogin(clienteEntity.getLogin());
         clienteDTO.setSenha(clienteEntity.getSenha());
         clienteDTO.setNome(clienteEntity.getNome());
         clienteDTO.setSobrenome(clienteEntity.getSobrenome());
@@ -107,7 +116,7 @@ public class ClienteServiceImp implements ClienteService {
      */
     private ClienteEntity fromDto(ClienteDTO clienteDTO) {
         ClienteEntity clienteEntity = new ClienteEntity();
-        clienteEntity.setLogin(clienteDTO.getLogin());
+        clienteEntity.setLogin(clienteDTO.getEmail());
         clienteEntity.setSenha(clienteDTO.getSenha());
         clienteEntity.setNome(clienteDTO.getNome());
         clienteEntity.setSobrenome(clienteDTO.getSobrenome());

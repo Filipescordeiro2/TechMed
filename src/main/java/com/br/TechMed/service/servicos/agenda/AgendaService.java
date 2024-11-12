@@ -14,15 +14,15 @@ import java.util.List;
 public interface AgendaService {
 
     // Gera uma agenda para um profissional em uma data específica e salva no banco de dados
-    void gerarAgenda(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId);
+    List<AgendaDTO> gerarAgenda(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId);
     // Busca a agenda por profissional
     List<AgendaDTO> buscarAgendaPorProfissional(Long profissionalId);
     // Gera uma agenda para um profissional em uma data específica e salva no banco de dados
-    void gerarAgendaDaManha(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId);
+    List<AgendaDTO> gerarAgendaDaManha(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId);
     // Gera uma agenda para um profissional em uma data específica e salva no banco de dados
-    void gerarAgendaDaTarde(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId);
+    List<AgendaDTO> gerarAgendaDaTarde(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId);
     // Gera uma agenda para um profissional em uma data específica e salva no banco de dados
-    void gerarAgendaDaNoite(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId);
+    List<AgendaDTO> gerarAgendaDaNoite(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId);
 
     void criarAgendaAvulso(Long profissionalId, LocalDate data, LocalTime hora, Long clinicaId, Long especialidadeId);
     List<AgendaDTO> buscarAgendaPorStatus(StatusAgenda status);

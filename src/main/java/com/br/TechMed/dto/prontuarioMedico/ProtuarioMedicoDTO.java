@@ -14,6 +14,7 @@ public class ProtuarioMedicoDTO {
     private Long id;
     private Long profissionalId;
     private Long clienteId; // Adicione este campo
+    private Long clinicaId;
     private String descricao;
     private LocalDate dataConsulta;
     private List<ExamesClienteDTO> exames;

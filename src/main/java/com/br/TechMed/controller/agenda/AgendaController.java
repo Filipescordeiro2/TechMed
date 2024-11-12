@@ -29,48 +29,48 @@ public class AgendaController {
      * Gera uma nova agenda.
      *
      * @param agendaDTO Dados da agenda a ser gerada.
-     * @return Resposta HTTP 200 (OK) se a operação for bem-sucedida.
+     * @return Lista de agendas geradas.
      */
     @PostMapping("/gerar")
-    public ResponseEntity<Void> gerarAgenda(@Valid @RequestBody AgendaDTO agendaDTO) {
-        agendaService.gerarAgenda(agendaDTO.getProfissionalId(), agendaDTO.getData(), agendaDTO.getClinicaId(), agendaDTO.getEspecialidadeId());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<AgendaDTO>> gerarAgenda(@Valid @RequestBody AgendaDTO agendaDTO) {
+        List<AgendaDTO> agenda = agendaService.gerarAgenda(agendaDTO.getProfissionalId(), agendaDTO.getData(), agendaDTO.getClinicaId(), agendaDTO.getEspecialidadeId());
+        return ResponseEntity.ok(agenda);
     }
 
     /**
      * Gera uma nova agenda para o período da manhã.
      *
      * @param agendaDTO Dados da agenda a ser gerada.
-     * @return Resposta HTTP 200 (OK) se a operação for bem-sucedida.
+     * @return Lista de agendas geradas.
      */
     @PostMapping("/gerarManha")
-    public ResponseEntity<Void> gerarAgendaManha(@Valid @RequestBody AgendaDTO agendaDTO) {
-        agendaService.gerarAgendaDaManha(agendaDTO.getProfissionalId(), agendaDTO.getData(), agendaDTO.getClinicaId(), agendaDTO.getEspecialidadeId());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<AgendaDTO>> gerarAgendaManha(@Valid @RequestBody AgendaDTO agendaDTO) {
+        List<AgendaDTO> agenda = agendaService.gerarAgendaDaManha(agendaDTO.getProfissionalId(), agendaDTO.getData(), agendaDTO.getClinicaId(), agendaDTO.getEspecialidadeId());
+        return ResponseEntity.ok(agenda);
     }
 
     /**
      * Gera uma nova agenda para o período da tarde.
      *
      * @param agendaDTO Dados da agenda a ser gerada.
-     * @return Resposta HTTP 200 (OK) se a operação for bem-sucedida.
+     * @return Lista de agendas geradas.
      */
     @PostMapping("/gerarTarde")
-    public ResponseEntity<Void> gerarAgendaTarde(@Valid @RequestBody AgendaDTO agendaDTO) {
-        agendaService.gerarAgendaDaTarde(agendaDTO.getProfissionalId(), agendaDTO.getData(), agendaDTO.getClinicaId(), agendaDTO.getEspecialidadeId());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<AgendaDTO>> gerarAgendaTarde(@Valid @RequestBody AgendaDTO agendaDTO) {
+        List<AgendaDTO> agenda = agendaService.gerarAgendaDaTarde(agendaDTO.getProfissionalId(), agendaDTO.getData(), agendaDTO.getClinicaId(), agendaDTO.getEspecialidadeId());
+        return ResponseEntity.ok(agenda);
     }
 
     /**
      * Gera uma nova agenda para o período da noite.
      *
      * @param agendaDTO Dados da agenda a ser gerada.
-     * @return Resposta HTTP 200 (OK) se a operação for bem-sucedida.
+     * @return Lista de agendas geradas.
      */
     @PostMapping("/gerarNoite")
-    public ResponseEntity<Void> gerarAgendaNoite(@Valid @RequestBody AgendaDTO agendaDTO) {
-        agendaService.gerarAgendaDaNoite(agendaDTO.getProfissionalId(), agendaDTO.getData(), agendaDTO.getClinicaId(), agendaDTO.getEspecialidadeId());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<List<AgendaDTO>> gerarAgendaNoite(@Valid @RequestBody AgendaDTO agendaDTO) {
+        List<AgendaDTO> agenda = agendaService.gerarAgendaDaNoite(agendaDTO.getProfissionalId(), agendaDTO.getData(), agendaDTO.getClinicaId(), agendaDTO.getEspecialidadeId());
+        return ResponseEntity.ok(agenda);
     }
 
     /**
@@ -96,6 +96,7 @@ public class AgendaController {
         List<AgendaDTO> agenda = agendaService.buscarAgendaPorProfissional(profissionalId);
         return ResponseEntity.ok(agenda);
     }
+
     /**
      * Recupera a agenda de um profissional.
      *

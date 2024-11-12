@@ -2,6 +2,7 @@ package com.br.TechMed.service.imp.agenda;
 
 import com.br.TechMed.Enum.Jornada;
 import com.br.TechMed.Enum.StatusAgenda;
+import com.br.TechMed.Enum.StatusUsuario;
 import com.br.TechMed.dto.agenda.AgendaDTO;
 import com.br.TechMed.dto.agenda.AgendaDetalhadaDTO;
 import com.br.TechMed.entity.agenda.AgendaEntity;
@@ -56,13 +57,15 @@ public class AgendaServiceImpl implements AgendaService {
         }
     }
 
-    /**
-     * Verifica se há um conflito de agendamento para um profissional em uma data e hora específicas.
-     *
-     * @param profissionalId o ID do profissional
-     * @param data a data do compromisso
-     * @param hora a hora do compromisso
-     */
+    private void verificarStatusAtivo(ProfissionalEntity profissional, ClinicaEntity clinica) {
+        if (profissional.getStatusProfissional() != StatusUsuario.ATIVO) {
+            throw new RegraDeNegocioException("O profissional não está ativo.");
+        }
+        if (clinica.getStatusClinica() != StatusUsuario.ATIVO) {
+            throw new RegraDeNegocioException("A clínica não está ativa.");
+        }
+    }
+
     private void verificarConflitoDeAgenda(Long profissionalId, LocalDate data, LocalTime hora) {
         boolean existeConflito = agendaRepository.existsByProfissionalIdAndDataAndHora(profissionalId, data, hora);
         if (existeConflito) {
@@ -70,11 +73,6 @@ public class AgendaServiceImpl implements AgendaService {
         }
     }
 
-    /**
-     * Salva uma lista de DTOs de agenda no banco de dados.
-     *
-     * @param agendaDTOList a lista de DTOs de agenda a ser salva
-     */
     private void salvarHorarios(List<AgendaDTO> agendaDTOList) {
         List<AgendaEntity> agendaList = agendaDTOList.stream().map(dto -> {
             ProfissionalEntity profissional = profissionalRepository.findById(dto.getProfissionalId())
@@ -82,6 +80,8 @@ public class AgendaServiceImpl implements AgendaService {
 
             ClinicaEntity clinica = clinicaRepository.findById(dto.getClinicaId())
                     .orElseThrow(() -> new RegraDeNegocioException("Clínica não encontrada"));
+
+            verificarStatusAtivo(profissional, clinica);
 
             EspecialidadeProfissionalEntity especialidade = especialidadeProfissionalRepository.findById(dto.getEspecialidadeId())
                     .orElseThrow(() -> new RegraDeNegocioException("Especialidade não encontrada"));
@@ -103,19 +103,6 @@ public class AgendaServiceImpl implements AgendaService {
         agendaRepository.saveAll(agendaList);
     }
 
-    /**
-     * Gera uma lista de DTOs de agenda para um intervalo de tempo e intervalo específicos.
-     *
-     * @param profissional a entidade do profissional
-     * @param clinica a entidade da clínica
-     * @param especialidade a entidade da especialidade
-     * @param data a data dos compromissos
-     * @param inicio a hora de início
-     * @param fim a hora de término
-     * @param intervaloMinutos o intervalo em minutos entre os compromissos
-     * @param jornada o turno de trabalho
-     * @return uma lista de DTOs de agenda gerados
-     */
     private List<AgendaDTO> gerarHorarios(ProfissionalEntity profissional, ClinicaEntity clinica, EspecialidadeProfissionalEntity especialidade, LocalDate data, LocalTime inicio, LocalTime fim, int intervaloMinutos, Jornada jornada) {
         List<AgendaDTO> horarios = new ArrayList<>();
         LocalTime horarioAtual = inicio;
@@ -138,7 +125,7 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public void gerarAgenda(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId) {
+    public List<AgendaDTO> gerarAgenda(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId) {
         verificarVinculoProfissionalClinica(profissionalId, clinicaId);
 
         ProfissionalEntity profissional = profissionalRepository.findById(profissionalId)
@@ -146,6 +133,8 @@ public class AgendaServiceImpl implements AgendaService {
 
         ClinicaEntity clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new RegraDeNegocioException("Clínica não encontrada"));
+
+        verificarStatusAtivo(profissional, clinica);
 
         EspecialidadeProfissionalEntity especialidade = especialidadeProfissionalRepository.findById(especialidadeId)
                 .orElseThrow(() -> new RegraDeNegocioException("Especialidade não encontrada"));
@@ -165,6 +154,7 @@ public class AgendaServiceImpl implements AgendaService {
         agendaDTOList.addAll(gerarHorarios(profissional, clinica, especialidade, data, inicioNoite, fimNoite, 30, Jornada.NOITE));
 
         salvarHorarios(agendaDTOList);
+        return agendaDTOList;
     }
 
     @Override
@@ -185,7 +175,7 @@ public class AgendaServiceImpl implements AgendaService {
     }
 
     @Override
-    public void gerarAgendaDaManha(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId) {
+    public List<AgendaDTO> gerarAgendaDaManha(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId) {
         verificarVinculoProfissionalClinica(profissionalId, clinicaId);
 
         ProfissionalEntity profissional = profissionalRepository.findById(profissionalId)
@@ -193,6 +183,8 @@ public class AgendaServiceImpl implements AgendaService {
 
         ClinicaEntity clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new RegraDeNegocioException("Clínica não encontrada"));
+
+        verificarStatusAtivo(profissional, clinica);
 
         EspecialidadeProfissionalEntity especialidade = especialidadeProfissionalRepository.findById(especialidadeId)
                 .orElseThrow(() -> new RegraDeNegocioException("Especialidade não encontrada"));
@@ -204,10 +196,11 @@ public class AgendaServiceImpl implements AgendaService {
         agendaDTOList.addAll(gerarHorarios(profissional, clinica, especialidade, data, inicioManha, fimManha, 30, Jornada.MANHA));
 
         salvarHorarios(agendaDTOList);
+        return agendaDTOList;
     }
 
     @Override
-    public void gerarAgendaDaTarde(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId) {
+    public List<AgendaDTO> gerarAgendaDaTarde(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId) {
         verificarVinculoProfissionalClinica(profissionalId, clinicaId);
 
         ProfissionalEntity profissional = profissionalRepository.findById(profissionalId)
@@ -215,6 +208,8 @@ public class AgendaServiceImpl implements AgendaService {
 
         ClinicaEntity clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new RegraDeNegocioException("Clínica não encontrada"));
+
+        verificarStatusAtivo(profissional, clinica);
 
         EspecialidadeProfissionalEntity especialidade = especialidadeProfissionalRepository.findById(especialidadeId)
                 .orElseThrow(() -> new RegraDeNegocioException("Especialidade não encontrada"));
@@ -226,10 +221,11 @@ public class AgendaServiceImpl implements AgendaService {
         agendaDTOList.addAll(gerarHorarios(profissional, clinica, especialidade, data, inicioTarde, fimTarde, 30, Jornada.TARDE));
 
         salvarHorarios(agendaDTOList);
+        return agendaDTOList;
     }
 
     @Override
-    public void gerarAgendaDaNoite(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId) {
+    public List<AgendaDTO> gerarAgendaDaNoite(Long profissionalId, LocalDate data, Long clinicaId, Long especialidadeId) {
         verificarVinculoProfissionalClinica(profissionalId, clinicaId);
 
         ProfissionalEntity profissional = profissionalRepository.findById(profissionalId)
@@ -237,6 +233,8 @@ public class AgendaServiceImpl implements AgendaService {
 
         ClinicaEntity clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new RegraDeNegocioException("Clínica não encontrada"));
+
+        verificarStatusAtivo(profissional, clinica);
 
         EspecialidadeProfissionalEntity especialidade = especialidadeProfissionalRepository.findById(especialidadeId)
                 .orElseThrow(() -> new RegraDeNegocioException("Especialidade não encontrada"));
@@ -248,6 +246,7 @@ public class AgendaServiceImpl implements AgendaService {
         agendaDTOList.addAll(gerarHorarios(profissional, clinica, especialidade, data, inicioNoite, fimNoite, 30, Jornada.NOITE));
 
         salvarHorarios(agendaDTOList);
+        return agendaDTOList;
     }
 
     @Override
@@ -277,6 +276,8 @@ public class AgendaServiceImpl implements AgendaService {
         ClinicaEntity clinica = clinicaRepository.findById(clinicaId)
                 .orElseThrow(() -> new RegraDeNegocioException("Clínica não encontrada"));
 
+        verificarStatusAtivo(profissional, clinica);
+
         EspecialidadeProfissionalEntity especialidade = especialidadeProfissionalRepository.findById(especialidadeId)
                 .orElseThrow(() -> new RegraDeNegocioException("Especialidade não encontrada"));
 
@@ -303,12 +304,6 @@ public class AgendaServiceImpl implements AgendaService {
         agendaRepository.save(agenda);
     }
 
-    /**
-     * Recupera a agenda de um profissional.
-     *
-     * @param profissionalId o ID do profissional
-     * @return a lista de agendas do profissional
-     */
     @Override
     @Transactional
     public List<AgendaDetalhadaDTO> buscarAgenda(Long profissionalId, Long clinicaId, String statusAgenda, LocalDate data, LocalTime hora, String nomeProfissional, Jornada periodo) {

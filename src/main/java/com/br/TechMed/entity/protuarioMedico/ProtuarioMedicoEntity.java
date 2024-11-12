@@ -1,6 +1,7 @@
 package com.br.TechMed.entity.protuarioMedico;
 
 import com.br.TechMed.entity.cliente.ClienteEntity;
+import com.br.TechMed.entity.clinica.ClinicaEntity;
 import com.br.TechMed.entity.profissional.ProfissionalEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,9 @@ public class ProtuarioMedicoEntity {
 
     @ManyToOne
     private ClienteEntity cliente;
+
+    @ManyToOne
+    private ClinicaEntity clinica;
 
     @Column(name = "descricao", length = 500)
     private String descricao;

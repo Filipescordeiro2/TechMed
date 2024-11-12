@@ -1,6 +1,7 @@
 package com.br.TechMed.service.imp.agendamento;
 
 import com.br.TechMed.Enum.StatusAgenda;
+import com.br.TechMed.Enum.StatusUsuario;
 import com.br.TechMed.dto.agendamento.AgendamentoDTO;
 import com.br.TechMed.entity.agenda.AgendaEntity;
 import com.br.TechMed.entity.agendamento.AgendamentoEntity;
@@ -47,6 +48,8 @@ public class AgendamentoServiceImp implements AgendamentoService {
         ClienteEntity cliente = validateCliente(agendamentoDTO.getClienteId());
 
         validateAgendaStatus(agenda);
+        validateProfissionalStatus(agenda.getProfissional());
+        validateClinicaStatus(agenda.getClinicaEntity());
 
         AgendamentoEntity agendamentoEntity = new AgendamentoEntity();
         agendamentoEntity.setAgenda(agenda);
@@ -67,10 +70,6 @@ public class AgendamentoServiceImp implements AgendamentoService {
                 .orElseThrow(() -> new RegraDeNegocioException("Agenda não encontrada"));
     }
 
-    private ProfissionalEntity validateProfissional(Long profissionalId) {
-        return profissionalRepository.findById(profissionalId)
-                .orElseThrow(() -> new RegraDeNegocioException("Profissional não encontrado"));
-    }
 
     private ClienteEntity validateCliente(Long clienteId) {
         return clienteRepository.findById(clienteId)
@@ -82,20 +81,22 @@ public class AgendamentoServiceImp implements AgendamentoService {
                 .orElseThrow(() -> new RegraDeNegocioException("Clínica não encontrada"));
     }
 
-    private void validateProfissionalClinica(Long profissionalId, Long clinicaId) {
-        profissionaisClinicaRepository.findByProfissionalIdAndClinicaEntityId(profissionalId, clinicaId)
-                .orElseThrow(() -> new RegraDeNegocioException("Profissional não está vinculado à clínica"));
-    }
-
-    private void validateClinicaAgenda(AgendaEntity agenda, Long clinicaId) {
-        if (!agenda.getClinicaEntity().getId().equals(clinicaId)) {
-            throw new RegraDeNegocioException("Clínica da agenda não corresponde à clínica do agendamento");
-        }
-    }
 
     private void validateAgendaStatus(AgendaEntity agenda) {
         if (!agenda.getStatusAgenda().equals(StatusAgenda.ABERTO)) {
             throw new RegraDeNegocioException("A agenda não está aberta para agendamento");
+        }
+    }
+
+    private void validateProfissionalStatus(ProfissionalEntity profissional) {
+        if (profissional.getStatusProfissional() != StatusUsuario.ATIVO) {
+            throw new RegraDeNegocioException("O profissional não está ativo.");
+        }
+    }
+
+    private void validateClinicaStatus(ClinicaEntity clinica) {
+        if (clinica.getStatusClinica() != StatusUsuario.ATIVO) {
+            throw new RegraDeNegocioException("A clínica não está ativa.");
         }
     }
 }

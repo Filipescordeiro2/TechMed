@@ -1,6 +1,9 @@
 package com.br.TechMed.controller.adm;
 
 import com.br.TechMed.dto.adm.AdminDTO;
+import com.br.TechMed.dto.adm.LoginSenhaAdminDTO;
+import com.br.TechMed.dto.cliente.ClienteDTO;
+import com.br.TechMed.dto.cliente.LoginSenhaClienteDTO;
 import com.br.TechMed.service.servicos.adm.AdmService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,18 @@ public class AdmController {
     public ResponseEntity<AdminDTO> cadastrarAdmin(@Valid @RequestBody AdminDTO adminDTO) {
         AdminDTO novoAdmin = admService.cadastrarAdmin(adminDTO);
         return ResponseEntity.ok(novoAdmin);
+    }
+
+    /**
+     * Autentica um cliente pelo login e senha.
+     *
+     * @param loginSenhaAdminDTO os dados de login e senha do cliente
+     * @return os dados do cliente autenticado
+     */
+    @PostMapping("/autenticar")
+    public ResponseEntity<AdminDTO> autenticarCliente(@RequestBody LoginSenhaAdminDTO loginSenhaAdminDTO) {
+        AdminDTO adminAutenticado = admService.autenticarAdmin(loginSenhaAdminDTO);
+        return ResponseEntity.ok(adminAutenticado);
     }
 
 }

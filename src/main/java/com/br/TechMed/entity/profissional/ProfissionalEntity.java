@@ -1,5 +1,6 @@
 package com.br.TechMed.entity.profissional;
 
+import com.br.TechMed.Enum.StatusUsuario;
 import com.br.TechMed.entity.clinica.ProfissionaisClinicaEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -96,6 +97,9 @@ public class ProfissionalEntity {
      */
     @OneToMany(mappedBy = "profissional", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProfissionaisClinicaEntity> clinicas = new ArrayList<>();
+
+    @Enumerated(EnumType.STRING)
+    private StatusUsuario StatusProfissional;
 
     public ProfissionalEntity(Long id) {
         this.id = id;

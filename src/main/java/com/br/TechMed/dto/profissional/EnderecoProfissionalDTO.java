@@ -18,9 +18,10 @@ public class EnderecoProfissionalDTO {
     @NotNull(message = "Logradouro é obrigatório")
     private String logradouro;
 
-    @NotNull(message = "Número é obrigatório")
+    @NotNull(message = "Numero é obrigatório")
     private String numero;
 
+    @NotNull(message = "Complemento é obrigatório")
     private String complemento;
 
     @NotNull(message = "Bairro é obrigatório")
@@ -32,6 +33,6 @@ public class EnderecoProfissionalDTO {
     @NotNull(message = "Estado é obrigatório")
     private String estado;
 
-    @NotNull(message = "País é obrigatório")
+    @NotNull(message = "Pais é obrigatório")
     private String pais;
 }

@@ -1,5 +1,6 @@
 package com.br.TechMed.entity.clinica;
 
+import com.br.TechMed.Enum.StatusUsuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -46,6 +47,9 @@ public class ClinicaEntity {
     @Column(name= "cnpj_clinica")
     @NotNull(message = "CNPJ é obrigatório")
     private String cnpj;
+
+    @Enumerated(EnumType.STRING)
+    private StatusUsuario StatusClinica;
 
     @OneToMany(mappedBy = "clinicaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EnderecoClinicaEntity> enderecos = new ArrayList<>();

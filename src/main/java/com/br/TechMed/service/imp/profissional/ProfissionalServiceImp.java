@@ -1,6 +1,7 @@
 package com.br.TechMed.service.imp.profissional;
 
 import com.br.TechMed.Enum.StatusAgenda;
+import com.br.TechMed.Enum.StatusUsuario;
 import com.br.TechMed.dto.Clinica.ProfissionaisClinicaDTO;
 import com.br.TechMed.dto.agenda.AgendaDetalhadaDTO;
 import com.br.TechMed.dto.profissional.EnderecoProfissionalDTO;
@@ -25,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -68,7 +68,7 @@ public class ProfissionalServiceImp implements ProfissionalService {
         try {
             // Valida se o adminId é válido
             if (!adminRepository.existsById(profissionalDTO.getAdminId())) {
-                throw new RegraDeNegocioException("Admin não encontrado");
+                throw new RuntimeException("Admin não encontrado");
             }
 
             ProfissionalEntity profissionalEntity = fromDto(profissionalDTO);
@@ -120,7 +120,7 @@ public class ProfissionalServiceImp implements ProfissionalService {
 
             return toDto(profissionalEntity);
         } catch (Exception e) {
-            throw new RegraDeNegocioException("Erro ao cadastrar o profissional");
+            throw new RuntimeException("Erro ao cadastrar o profissional: " + e.getMessage(), e);
         }
     }
 
@@ -133,7 +133,6 @@ public class ProfissionalServiceImp implements ProfissionalService {
     private ProfissionalDTO toDto(ProfissionalEntity profissionalEntity) {
         ProfissionalDTO profissionalDTO = new ProfissionalDTO();
         profissionalDTO.setId(profissionalEntity.getId());
-        profissionalDTO.setLogin(profissionalEntity.getLogin());
         profissionalDTO.setSenha(profissionalEntity.getSenha());
         profissionalDTO.setNome(profissionalEntity.getNome());
         profissionalDTO.setSobrenome(profissionalEntity.getSobrenome());
@@ -141,6 +140,7 @@ public class ProfissionalServiceImp implements ProfissionalService {
         profissionalDTO.setCpf(profissionalEntity.getCpf());
         profissionalDTO.setCelular(profissionalEntity.getCelular());
         profissionalDTO.setAdminId(profissionalDTO.getAdminId());
+        profissionalDTO.setStatusProfissional(profissionalDTO.getStatusProfissional());
 
         if (!profissionalEntity.getEnderecos().isEmpty()) {
             List<EnderecoProfissionalDTO> enderecoDTOs = profissionalEntity.getEnderecos().stream()
@@ -175,6 +175,18 @@ public class ProfissionalServiceImp implements ProfissionalService {
     }
 
     /**
+     * Retorna a quantidade de profissionais cadastrados.
+     *
+     * @return a quantidade de profissionais cadastrados
+     */
+    @Override
+    public long contarProfissionais() {
+        return profissionalRepository.findAll().stream()
+                .filter(profissional -> profissional.getStatusProfissional() == StatusUsuario.ATIVO)
+                .count();
+    }
+
+    /**
      * Converte um DTO ProfissionalDTO para uma entidade ProfissionalEntity.
      *
      * @param profissionalDTO o DTO do profissional
@@ -182,13 +194,14 @@ public class ProfissionalServiceImp implements ProfissionalService {
      */
     private ProfissionalEntity fromDto(ProfissionalDTO profissionalDTO) {
         ProfissionalEntity profissionalEntity = new ProfissionalEntity();
-        profissionalEntity.setLogin(profissionalDTO.getLogin());
+        profissionalEntity.setLogin(profissionalDTO.getEmail());
         profissionalEntity.setSenha(profissionalDTO.getSenha());
         profissionalEntity.setNome(profissionalDTO.getNome());
         profissionalEntity.setSobrenome(profissionalDTO.getSobrenome());
         profissionalEntity.setEmail(profissionalDTO.getEmail());
         profissionalEntity.setCpf(profissionalDTO.getCpf());
         profissionalEntity.setCelular(profissionalDTO.getCelular());
+        profissionalEntity.setStatusProfissional(StatusUsuario.ATIVO);
         return profissionalEntity;
     }
 
@@ -225,7 +238,7 @@ public class ProfissionalServiceImp implements ProfissionalService {
         enderecoEntity.setNumero(enderecoDTO.getNumero());
         enderecoEntity.setComplemento(enderecoDTO.getComplemento());
         enderecoEntity.setBairro(enderecoDTO.getBairro());
-        enderecoEntity.setCidade(enderecoDTO.getCidade());
+        enderecoEntity.setCidade(enderecoDTO.getCidade()); // Ensure cidade is set
         enderecoEntity.setEstado(enderecoDTO.getEstado());
         enderecoEntity.setPais(enderecoDTO.getPais());
         return enderecoEntity;
@@ -274,9 +287,13 @@ public class ProfissionalServiceImp implements ProfissionalService {
             if (!profissionalRepository.existsById(profissionalId)) {
                 throw new RegraDeNegocioException("Profissional não encontrado");
             }
-            agendas = agendaRepository.findByProfissionalId(profissionalId);
+            agendas = agendaRepository.findByProfissionalId(profissionalId).stream()
+                    .filter(agenda -> agenda.getProfissional().getStatusProfissional() == StatusUsuario.ATIVO)
+                    .collect(Collectors.toList());
         } else {
-            agendas = agendaRepository.findByClinicaEntityId(clinicaId);
+            agendas = agendaRepository.findByClinicaEntityId(clinicaId).stream()
+                    .filter(agenda -> agenda.getProfissional().getStatusProfissional() == StatusUsuario.ATIVO)
+                    .collect(Collectors.toList());
         }
 
         return agendas.stream()
@@ -301,5 +318,14 @@ public class ProfissionalServiceImp implements ProfissionalService {
 
                     return dto;
                 }).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public void atualizarStatusProfissional(Long id) {
+        profissionalRepository.findById(id).map(profissional -> {
+            profissional.setStatusProfissional(StatusUsuario.INATIVO);
+            return profissionalRepository.save(profissional);
+        }).orElseThrow(() -> new RegraDeNegocioException("erro ao alterar status"));
     }
 }

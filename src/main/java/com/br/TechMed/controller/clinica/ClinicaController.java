@@ -28,4 +28,20 @@ public class ClinicaController {
         List<ClinicaDTO> clinicas = clinicaService.listarTodasClinicas();
         return ResponseEntity.ok(clinicas);
     }
+
+    /**
+     * Retorna a quantidade de clinica cadastrados.
+     *
+     * @return a quantidade de clinica cadastrados
+     */
+    @GetMapping("/contar")
+    public ResponseEntity<Long> contarClinicas() {
+        long quantidadeClinicas = clinicaService.contarClinicas();
+        return ResponseEntity.ok(quantidadeClinicas);
+    }
+
+    @PatchMapping("/inativarClinica/{id}")
+    public void updateStatus(@PathVariable("id") Long id) {
+        clinicaService.atualizarStatusClinica(id);
+    }
 }

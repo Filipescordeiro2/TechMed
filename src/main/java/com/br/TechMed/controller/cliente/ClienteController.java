@@ -51,4 +51,15 @@ public class ClienteController {
         ClienteDTO clienteAutenticado = clienteService.autenticarCliente(loginSenhaClienteDTO);
         return ResponseEntity.ok(clienteAutenticado);
     }
+
+    /**
+     * Retorna a quantidade de clientes cadastrados.
+     *
+     * @return a quantidade de clientes cadastrados
+     */
+    @GetMapping("/contar")
+    public ResponseEntity<Long> contarClientes() {
+        long quantidadeClientes = clienteService.contarClientes();
+        return ResponseEntity.ok(quantidadeClientes);
+    }
 }

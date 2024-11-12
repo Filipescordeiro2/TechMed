@@ -9,5 +9,8 @@ import java.util.List;
 public interface ClinicaService {
     ClinicaDTO cadastrarClinica(ClinicaDTO clinicaDTO);
     List<ClinicaDTO> listarTodasClinicas();
+    long contarClinicas();
+    void atualizarStatusClinica(Long id);
+
 
 }

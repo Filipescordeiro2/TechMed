@@ -1,5 +1,6 @@
 package com.br.TechMed.service.imp.clinica;
 
+import com.br.TechMed.Enum.StatusUsuario;
 import com.br.TechMed.dto.Clinica.ProfissionaisClinicaDTO;
 import com.br.TechMed.dto.Clinica.ProfissionaisClinicaDetalhadoDTO;
 import com.br.TechMed.entity.clinica.ClinicaEntity;
@@ -33,18 +34,19 @@ public class ProfissionaisClinicaServiceImp implements ProfissionaisClinicaServi
     @Autowired
     private ClinicaRepository clinicaRepository;
 
-    /**
-     * Salva a associação entre um profissional e uma clínica no sistema.
-     *
-     * @param profissionaisClinicaDTO os dados da associação a ser salva
-     * @return os dados da associação salva
-     */
     @Override
     public ProfissionaisClinicaDTO save(ProfissionaisClinicaDTO profissionaisClinicaDTO) {
-        // Verifica se já existe uma combinação de clinica_id e profissional_id
         if (profissionaisClinicaRepository.existsByClinicaEntityIdAndProfissionalId(
                 profissionaisClinicaDTO.getClinicaId(), profissionaisClinicaDTO.getProfissionalId())) {
             throw new RegraDeNegocioException("Já existe um profissional com este ID para a clínica especificada.");
+        }
+
+        if (!isClinicaAtiva(profissionaisClinicaDTO.getClinicaId())) {
+            throw new RegraDeNegocioException("A clínica especificada não está ativa.");
+        }
+
+        if (!isProfissionalAtivo(profissionaisClinicaDTO.getProfissionalId())) {
+            throw new RegraDeNegocioException("O profissional especificado não está ativo.");
         }
 
         ProfissionaisClinicaEntity profissionaisClinica = fromDto(profissionaisClinicaDTO);
@@ -52,30 +54,30 @@ public class ProfissionaisClinicaServiceImp implements ProfissionaisClinicaServi
         return toDto(profissionaisClinica);
     }
 
-    /**
-     * Busca todas as associações de um profissional pelo seu ID.
-     *
-     * @param profissionalId o ID do profissional
-     * @return uma lista de associações do profissional
-     */
+    private boolean isClinicaAtiva(Long clinicaId) {
+        ClinicaEntity clinica = fetchClinicaById(clinicaId);
+        return clinica.getStatusClinica() == StatusUsuario.ATIVO;
+    }
+
+    private boolean isProfissionalAtivo(Long profissionalId) {
+        ProfissionalEntity profissional = fetchProfissionalById(profissionalId);
+        return profissional.getStatusProfissional() == StatusUsuario.ATIVO;
+    }
+
     @Override
     public List<ProfissionaisClinicaDTO> findByProfissionalId(Long profissionalId) {
         return profissionaisClinicaRepository.findByProfissionalId(profissionalId)
                 .stream()
+                .filter(profissionaisClinica -> profissionaisClinica.getProfissional().getStatusProfissional() == StatusUsuario.ATIVO)
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Busca todas as associações de uma clínica pelo seu ID.
-     *
-     * @param clinicaId o ID da clínica
-     * @return uma lista de associações da clínica
-     */
     @Override
     public List<ProfissionaisClinicaDTO> findByClinicaId(Long clinicaId) {
         return profissionaisClinicaRepository.findByClinicaEntityId(clinicaId)
                 .stream()
+                .filter(profissionaisClinica -> profissionaisClinica.getClinicaEntity().getStatusClinica() == StatusUsuario.ATIVO)
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
@@ -90,6 +92,7 @@ public class ProfissionaisClinicaServiceImp implements ProfissionaisClinicaServi
         List<ProfissionaisClinicaEntity> profissionaisClinicaEntities = profissionaisClinicaRepository.findByProfissionalId(profissionalId);
 
         return profissionaisClinicaEntities.stream()
+                .filter(profissionaisClinica -> profissionaisClinica.getProfissional().getStatusProfissional() == StatusUsuario.ATIVO)
                 .map(profissionaisClinica -> {
                     ProfissionaisClinicaDetalhadoDTO dto = new ProfissionaisClinicaDetalhadoDTO();
                     dto.setId(profissionaisClinica.getId());
@@ -111,6 +114,7 @@ public class ProfissionaisClinicaServiceImp implements ProfissionaisClinicaServi
         List<ProfissionaisClinicaEntity> profissionaisClinicaEntities = profissionaisClinicaRepository.findByClinicaEntityId(clinicaId);
 
         return profissionaisClinicaEntities.stream()
+                .filter(profissionaisClinica -> profissionaisClinica.getClinicaEntity().getStatusClinica() == StatusUsuario.ATIVO)
                 .map(profissionaisClinica -> {
                     ProfissionaisClinicaDetalhadoDTO dto = new ProfissionaisClinicaDetalhadoDTO();
                     dto.setId(profissionaisClinica.getId());
@@ -122,12 +126,6 @@ public class ProfissionaisClinicaServiceImp implements ProfissionaisClinicaServi
                 }).collect(Collectors.toList());
     }
 
-    /**
-     * Converte uma entidade ProfissionaisClinicaEntity para um DTO ProfissionaisClinicaDTO.
-     *
-     * @param profissionaisClinica a entidade da associação
-     * @return o DTO da associação
-     */
     private ProfissionaisClinicaDTO toDto(ProfissionaisClinicaEntity profissionaisClinica) {
         return new ProfissionaisClinicaDTO(
                 profissionaisClinica.getId(),
@@ -136,12 +134,6 @@ public class ProfissionaisClinicaServiceImp implements ProfissionaisClinicaServi
         );
     }
 
-    /**
-     * Converte um DTO ProfissionaisClinicaDTO para uma entidade ProfissionaisClinicaEntity.
-     *
-     * @param profissionaisClinicaDTO o DTO da associação
-     * @return a entidade da associação
-     */
     private ProfissionaisClinicaEntity fromDto(ProfissionaisClinicaDTO profissionaisClinicaDTO) {
         ProfissionaisClinicaEntity profissionaisClinica = new ProfissionaisClinicaEntity();
         profissionaisClinica.setId(profissionaisClinicaDTO.getId());
@@ -150,23 +142,11 @@ public class ProfissionaisClinicaServiceImp implements ProfissionaisClinicaServi
         return profissionaisClinica;
     }
 
-    /**
-     * Busca uma clínica pelo seu ID.
-     *
-     * @param id o ID da clínica
-     * @return a entidade da clínica
-     */
     private ClinicaEntity fetchClinicaById(Long id) {
         return clinicaRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Clinica not found with id: " + id));
     }
 
-    /**
-     * Busca um profissional pelo seu ID.
-     *
-     * @param id o ID do profissional
-     * @return a entidade do profissional
-     */
     private ProfissionalEntity fetchProfissionalById(Long id) {
         return profissionalRepository.findById(id)
                 .orElseThrow(() -> new RegraDeNegocioException("Profissional not found with id: " + id));

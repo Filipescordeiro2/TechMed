@@ -15,9 +15,6 @@ public class ClienteDTO {
 
     private Long id;
 
-    @NotNull(message = "Login é obrigatório")
-    private String login;
-
     @NotNull(message = "Senha é obrigatória")
     private String senha;
 

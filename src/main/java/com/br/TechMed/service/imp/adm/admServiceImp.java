@@ -1,6 +1,7 @@
 package com.br.TechMed.service.imp.adm;
 
 import com.br.TechMed.dto.adm.AdminDTO;
+import com.br.TechMed.dto.adm.LoginSenhaAdminDTO;
 import com.br.TechMed.entity.adm.AdminEntity;
 import com.br.TechMed.exception.RegraDeNegocioException;
 import com.br.TechMed.repository.adm.AdmRepository;
@@ -14,7 +15,6 @@ public class admServiceImp implements AdmService {
 
     @Autowired
     private AdmRepository admRepository;
-
 
     @Override
     @Transactional
@@ -31,6 +31,17 @@ public class admServiceImp implements AdmService {
         }
     }
 
+    @Override
+    public AdminDTO autenticarAdmin(LoginSenhaAdminDTO loginSenhaAdminDTO) {
+        AdminEntity adminEntity = admRepository.findByLogin(loginSenhaAdminDTO.getLogin())
+                .orElseThrow(() -> new RegraDeNegocioException("Login ou senha inválidos"));
+
+        if (!adminEntity.getSenha().equals(loginSenhaAdminDTO.getSenha())) {
+            throw new RegraDeNegocioException("Login ou senha inválidos");
+        }
+
+        return toDto(adminEntity);
+    }
     /**
      * Converte uma entidade AdminEntity para um DTO AdminDTO.
      *
@@ -40,7 +51,6 @@ public class admServiceImp implements AdmService {
     private AdminDTO toDto(AdminEntity adminEntity) {
         AdminDTO adminDTO = new AdminDTO();
         adminDTO.setId(adminEntity.getId());
-        adminDTO.setLogin(adminEntity.getLogin());
         adminDTO.setSenha(adminEntity.getSenha());
         adminDTO.setNome(adminEntity.getNome());
         adminDTO.setSobrenome(adminEntity.getSobrenome());
@@ -58,7 +68,7 @@ public class admServiceImp implements AdmService {
      */
     private AdminEntity fromDto(AdminDTO adminDTO) {
         AdminEntity adminEntity = new AdminEntity();
-        adminEntity.setLogin(adminDTO.getLogin());
+        adminEntity.setLogin(adminDTO.getEmail());
         adminEntity.setSenha(adminDTO.getSenha());
         adminEntity.setNome(adminDTO.getNome());
         adminEntity.setSobrenome(adminDTO.getSobrenome());

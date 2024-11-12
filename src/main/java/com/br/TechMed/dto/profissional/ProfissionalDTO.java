@@ -1,5 +1,6 @@
 package com.br.TechMed.dto.profissional;
 
+import com.br.TechMed.Enum.StatusUsuario;
 import com.br.TechMed.dto.Clinica.ProfissionaisClinicaDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -17,8 +18,6 @@ public class ProfissionalDTO {
 
     private Long id;
 
-    @NotNull(message = "Login é obrigatório")
-    private String login;
 
     @NotNull(message = "Senha é obrigatória")
     private String senha;
@@ -41,6 +40,8 @@ public class ProfissionalDTO {
     private Long adminId;
 
     private String celular;
+
+    private StatusUsuario StatusProfissional;
 
     private List<EspecialidadeProfissionalDTO> especialidades;
 

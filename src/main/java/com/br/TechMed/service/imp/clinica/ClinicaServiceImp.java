@@ -1,5 +1,6 @@
 package com.br.TechMed.service.imp.clinica;
 
+import com.br.TechMed.Enum.StatusUsuario;
 import com.br.TechMed.dto.Clinica.ClinicaDTO;
 import com.br.TechMed.dto.Clinica.EnderecoClinicaDTO;
 import com.br.TechMed.dto.Clinica.EspecialidadeClinicaDTO;
@@ -8,11 +9,9 @@ import com.br.TechMed.entity.adm.ClinicasAdminEntity;
 import com.br.TechMed.entity.clinica.ClinicaEntity;
 import com.br.TechMed.entity.clinica.EnderecoClinicaEntity;
 import com.br.TechMed.entity.clinica.EspecialidadeClinicaEntity;
-import com.br.TechMed.entity.adm.ProfissionaisAdminEntity;
 import com.br.TechMed.exception.RegraDeNegocioException;
 import com.br.TechMed.repository.adm.AdmRepository;
 import com.br.TechMed.repository.adm.ClinicaAdminRepository;
-import com.br.TechMed.repository.adm.ProfissionaisAdminRepository;
 import com.br.TechMed.repository.clinica.ClinicaRepository;
 import com.br.TechMed.service.servicos.clinica.ClinicaService;
 import com.br.TechMed.service.servicos.clinica.ProfissionaisClinicaService;
@@ -126,6 +125,7 @@ public class ClinicaServiceImp implements ClinicaService {
         clinicaDTO.setCelular(clinicaEntity.getCelular());
         clinicaDTO.setEmail(clinicaEntity.getEmail());
         clinicaDTO.setCnpj(clinicaEntity.getCnpj());
+        clinicaDTO.setStatusClinica(clinicaEntity.getStatusClinica());
 
         if (!clinicaEntity.getEnderecos().isEmpty()) {
             clinicaDTO.setEnderecoClinica(toDto(clinicaEntity.getEnderecos().get(0)));
@@ -158,6 +158,7 @@ public class ClinicaServiceImp implements ClinicaService {
         clinicaEntity.setCelular(clinicaDTO.getCelular());
         clinicaEntity.setEmail(clinicaDTO.getEmail());
         clinicaEntity.setCnpj(clinicaDTO.getCnpj());
+        clinicaEntity.setStatusClinica(StatusUsuario.ATIVO);
         return clinicaEntity;
     }
 
@@ -233,9 +234,29 @@ public class ClinicaServiceImp implements ClinicaService {
     @Override
     @Transactional(readOnly = true)
     public List<ClinicaDTO> listarTodasClinicas() {
-        List<ClinicaEntity> clinicas = clinicaRepository.findAll();
+        List<ClinicaEntity> clinicas = clinicaRepository.findAll().stream()
+                .filter(clinica -> clinica.getStatusClinica() == StatusUsuario.ATIVO)
+                .collect(Collectors.toList());
         return clinicas.stream()
                 .map(this::toDto)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public long contarClinicas() {
+        return clinicaRepository.findAll().stream()
+                .filter(clinica -> clinica.getStatusClinica() == StatusUsuario.ATIVO)
+                .count();
+    }
+
+    @Override
+    @Transactional
+    public void atualizarStatusClinica(Long id) {
+        ClinicaEntity clinicaEntity = clinicaRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Clínica não encontrada"));
+        clinicaEntity.setStatusClinica(StatusUsuario.INATIVO);
+        clinicaRepository.save(clinicaEntity);
+    }
+
+
 }
