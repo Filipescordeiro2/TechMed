@@ -1,6 +1,7 @@
 package com.br.TechMed.dto.profissional;
 
 import com.br.TechMed.Enum.StatusUsuario;
+import com.br.TechMed.Enum.TipoUsuario;
 import com.br.TechMed.dto.Clinica.ProfissionaisClinicaDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -42,6 +43,8 @@ public class ProfissionalDTO {
     private String celular;
 
     private StatusUsuario StatusProfissional;
+
+    private TipoUsuario tipoUsuario;
 
     private List<EspecialidadeProfissionalDTO> especialidades;
 

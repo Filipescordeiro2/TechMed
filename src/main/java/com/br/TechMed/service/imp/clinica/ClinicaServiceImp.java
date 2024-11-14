@@ -1,6 +1,7 @@
 package com.br.TechMed.service.imp.clinica;
 
 import com.br.TechMed.Enum.StatusUsuario;
+import com.br.TechMed.Enum.TipoUsuario;
 import com.br.TechMed.dto.Clinica.ClinicaDTO;
 import com.br.TechMed.dto.Clinica.EnderecoClinicaDTO;
 import com.br.TechMed.dto.Clinica.EspecialidadeClinicaDTO;
@@ -126,6 +127,7 @@ public class ClinicaServiceImp implements ClinicaService {
         clinicaDTO.setEmail(clinicaEntity.getEmail());
         clinicaDTO.setCnpj(clinicaEntity.getCnpj());
         clinicaDTO.setStatusClinica(clinicaEntity.getStatusClinica());
+        clinicaDTO.setTipoUsuario(clinicaEntity.getTipoUsuario());
 
         if (!clinicaEntity.getEnderecos().isEmpty()) {
             clinicaDTO.setEnderecoClinica(toDto(clinicaEntity.getEnderecos().get(0)));
@@ -159,6 +161,7 @@ public class ClinicaServiceImp implements ClinicaService {
         clinicaEntity.setEmail(clinicaDTO.getEmail());
         clinicaEntity.setCnpj(clinicaDTO.getCnpj());
         clinicaEntity.setStatusClinica(StatusUsuario.ATIVO);
+        clinicaEntity.setTipoUsuario(TipoUsuario.CLINICA);
         return clinicaEntity;
     }
 

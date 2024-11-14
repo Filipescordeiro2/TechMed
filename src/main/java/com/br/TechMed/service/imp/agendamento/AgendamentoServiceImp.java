@@ -1,8 +1,10 @@
 package com.br.TechMed.service.imp.agendamento;
 
+import com.br.TechMed.Enum.Especialidades;
 import com.br.TechMed.Enum.StatusAgenda;
 import com.br.TechMed.Enum.StatusUsuario;
 import com.br.TechMed.dto.agendamento.AgendamentoDTO;
+import com.br.TechMed.dto.agendamento.AgendamentoDetalhadaDTO;
 import com.br.TechMed.entity.agenda.AgendaEntity;
 import com.br.TechMed.entity.agendamento.AgendamentoEntity;
 import com.br.TechMed.entity.cliente.ClienteEntity;
@@ -19,6 +21,11 @@ import com.br.TechMed.service.servicos.agendamento.AgendamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AgendamentoServiceImp implements AgendamentoService {
@@ -98,5 +105,43 @@ public class AgendamentoServiceImp implements AgendamentoService {
         if (clinica.getStatusClinica() != StatusUsuario.ATIVO) {
             throw new RegraDeNegocioException("A clínica não está ativa.");
         }
+    }
+
+    @Override
+    @Transactional
+    public List<AgendamentoDetalhadaDTO> getAgendamentoDetalhado(Long agendaId) {
+        if (agendaId == null) {
+            throw new IllegalArgumentException("O ID da agenda não pode ser nulo");
+        }
+
+        AgendaEntity agenda = agendaRepository.findById(agendaId)
+                .orElseThrow(() -> new RegraDeNegocioException("Agenda não encontrada"));
+
+        AgendamentoEntity agendamento = agendamentoRepository.findByAgenda(agenda)
+                .orElseThrow(() -> new RegraDeNegocioException("Agendamento não encontrado para a agenda fornecida"));
+
+        ClienteEntity cliente = agendamento.getCliente();
+
+        AgendamentoDetalhadaDTO dto = new AgendamentoDetalhadaDTO();
+        dto.setCodigoAgenda(agenda.getId());
+        dto.setCodigoClinica(agenda.getClinicaEntity().getId());
+        dto.setData(agenda.getData());
+        dto.setHora(agenda.getHora());
+        dto.setPeriodoAgenda(agenda.getJornada().name());
+        dto.setStatusAgenda(agenda.getStatusAgenda().name());
+        dto.setClinica(agenda.getClinicaEntity().getNomeClinica());
+        dto.setEmailClinica(agenda.getClinicaEntity().getEmail());
+        dto.setCelularClinica(agenda.getClinicaEntity().getCelular());
+        dto.setNomeProfissional(agenda.getProfissional().getNome());
+        dto.setNomeEspecialidadeProfissional(String.valueOf(agenda.getEspecialidadeProfissionalEntity().getEspecialidades()));
+        dto.setDescricaoEspecialidadeProfissional(agenda.getEspecialidadeProfissionalEntity().getDescricaoEspecialidade());
+        dto.setCodigoCliente(cliente.getId());
+        dto.setNomeCliente(cliente.getNome());
+        dto.setSobrenomeCliente(cliente.getSobrenome());
+        dto.setEmailCliente(cliente.getEmail());
+        dto.setCelularCliente(cliente.getCelular());
+        dto.setCpfCliente(cliente.getCpf());
+
+        return List.of(dto);
     }
 }

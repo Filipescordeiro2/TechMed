@@ -60,8 +60,9 @@ public class ProfissionalController {
             @RequestParam(required = false) String statusAgenda,
             @RequestParam(required = false) LocalDate data,
             @RequestParam(required = false) LocalTime hora,
-            @RequestParam(required = false) String nomeProfissional) {
-        List<AgendaDetalhadaDTO> agenda = profissionalService.getAgendaByProfissional(profissionalId, clinicaId, statusAgenda, data, hora, nomeProfissional);
+            @RequestParam(required = false) String nomeProfissional,
+            @RequestParam(required = false) String nomeEspecialidade) {
+        List<AgendaDetalhadaDTO> agenda = profissionalService.getAgendaByProfissional(profissionalId, clinicaId, statusAgenda, data, hora, nomeProfissional,nomeEspecialidade);
         return ResponseEntity.ok(agenda);
     }
 }

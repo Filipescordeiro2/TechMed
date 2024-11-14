@@ -1,5 +1,6 @@
 package com.br.TechMed.dto.adm;
 
+import com.br.TechMed.Enum.TipoUsuario;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -28,5 +29,8 @@ public class AdminDTO {
     private String cpf;
 
     private String celular;
+
+    private TipoUsuario tipoUsuario;
+
 
 }

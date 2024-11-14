@@ -345,4 +345,23 @@ public class AgendaServiceImpl implements AgendaService {
                     return dto;
                 }).collect(Collectors.toList());
     }
+
+    /**
+     * Altera o status da agenda para CANCELADO.
+     *
+     * @param agendaId o ID da agenda a ser cancelada
+     */
+    @Override
+    @Transactional
+    public void cancelarAgenda(Long agendaId) {
+        AgendaEntity agenda = agendaRepository.findById(agendaId)
+                .orElseThrow(() -> new RegraDeNegocioException("Agenda não encontrada"));
+
+        if (agenda.getStatusAgenda() == StatusAgenda.CANCELADO) {
+            throw new RegraDeNegocioException("A agenda já está cancelada");
+        }
+
+        agenda.setStatusAgenda(StatusAgenda.CANCELADO);
+        agendaRepository.save(agenda);
+    }
 }

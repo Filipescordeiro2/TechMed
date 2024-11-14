@@ -1,7 +1,9 @@
 package com.br.TechMed.service.imp.profissional;
 
+import com.br.TechMed.Enum.Especialidades;
 import com.br.TechMed.Enum.StatusAgenda;
 import com.br.TechMed.Enum.StatusUsuario;
+import com.br.TechMed.Enum.TipoUsuario;
 import com.br.TechMed.dto.Clinica.ProfissionaisClinicaDTO;
 import com.br.TechMed.dto.agenda.AgendaDetalhadaDTO;
 import com.br.TechMed.dto.profissional.EnderecoProfissionalDTO;
@@ -139,8 +141,8 @@ public class ProfissionalServiceImp implements ProfissionalService {
         profissionalDTO.setEmail(profissionalEntity.getEmail());
         profissionalDTO.setCpf(profissionalEntity.getCpf());
         profissionalDTO.setCelular(profissionalEntity.getCelular());
-        profissionalDTO.setAdminId(profissionalDTO.getAdminId());
-        profissionalDTO.setStatusProfissional(profissionalDTO.getStatusProfissional());
+        profissionalDTO.setStatusProfissional(profissionalEntity.getStatusProfissional()); // Corrigido
+        profissionalDTO.setTipoUsuario(profissionalEntity.getTipoUsuario()); // Corrigido
 
         if (!profissionalEntity.getEnderecos().isEmpty()) {
             List<EnderecoProfissionalDTO> enderecoDTOs = profissionalEntity.getEnderecos().stream()
@@ -202,6 +204,7 @@ public class ProfissionalServiceImp implements ProfissionalService {
         profissionalEntity.setCpf(profissionalDTO.getCpf());
         profissionalEntity.setCelular(profissionalDTO.getCelular());
         profissionalEntity.setStatusProfissional(StatusUsuario.ATIVO);
+        profissionalEntity.setTipoUsuario(TipoUsuario.MEDICO);
         return profissionalEntity;
     }
 
@@ -277,7 +280,7 @@ public class ProfissionalServiceImp implements ProfissionalService {
      */
     @Override
     @Transactional
-    public List<AgendaDetalhadaDTO> getAgendaByProfissional(Long profissionalId, Long clinicaId, String statusAgenda, LocalDate data, LocalTime hora, String nomeProfissional) {
+    public List<AgendaDetalhadaDTO> getAgendaByProfissional(Long profissionalId, Long clinicaId, String statusAgenda, LocalDate data, LocalTime hora, String nomeProfissional, String nomeEspecialidade) {
         if (clinicaId == null) {
             throw new IllegalArgumentException("O ID da clínica não pode ser nulo");
         }
@@ -297,10 +300,11 @@ public class ProfissionalServiceImp implements ProfissionalService {
         }
 
         return agendas.stream()
-                .filter(agenda -> agenda.getStatusAgenda() == StatusAgenda.ABERTO)
+                .filter(agenda -> agenda.getStatusAgenda() == StatusAgenda.ABERTO || agenda.getStatusAgenda() == StatusAgenda.AGENDADO)
                 .filter(agenda -> data == null || agenda.getData().equals(data))
                 .filter(agenda -> hora == null || agenda.getHora().equals(hora))
                 .filter(agenda -> nomeProfissional == null || agenda.getProfissional().getNome().equalsIgnoreCase(nomeProfissional))
+                .filter(agenda -> nomeEspecialidade == null || Especialidades.fromStringIgnoreCase(nomeEspecialidade).equals(agenda.getEspecialidadeProfissionalEntity().getEspecialidades()))
                 .map(agenda -> {
                     AgendaDetalhadaDTO dto = new AgendaDetalhadaDTO();
                     dto.setCodigoAgenda(agenda.getId());
@@ -327,5 +331,18 @@ public class ProfissionalServiceImp implements ProfissionalService {
             profissional.setStatusProfissional(StatusUsuario.INATIVO);
             return profissionalRepository.save(profissional);
         }).orElseThrow(() -> new RegraDeNegocioException("erro ao alterar status"));
+    }
+
+    /**
+     * Lista todos os profissionais ativos.
+     *
+     * @return a lista de profissionais ativos
+     */
+    @Override
+    public List<ProfissionalDTO> listarProfissionaisAtivos() {
+        return profissionalRepository.findAll().stream()
+                .filter(profissional -> profissional.getStatusProfissional() == StatusUsuario.ATIVO)
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 }

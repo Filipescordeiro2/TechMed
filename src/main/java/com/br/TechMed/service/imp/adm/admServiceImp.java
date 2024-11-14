@@ -1,5 +1,6 @@
 package com.br.TechMed.service.imp.adm;
 
+import com.br.TechMed.Enum.TipoUsuario;
 import com.br.TechMed.dto.adm.AdminDTO;
 import com.br.TechMed.dto.adm.LoginSenhaAdminDTO;
 import com.br.TechMed.entity.adm.AdminEntity;
@@ -57,6 +58,8 @@ public class admServiceImp implements AdmService {
         adminDTO.setEmail(adminEntity.getEmail());
         adminDTO.setCpf(adminEntity.getCpf());
         adminDTO.setCelular(adminEntity.getCelular());
+        adminDTO.setTipoUsuario(adminEntity.getTipoUsuario());
+
         return adminDTO;
     }
 
@@ -75,6 +78,7 @@ public class admServiceImp implements AdmService {
         adminEntity.setEmail(adminDTO.getEmail());
         adminEntity.setCpf(adminDTO.getCpf());
         adminEntity.setCelular(adminDTO.getCelular());
+        adminEntity.setTipoUsuario(TipoUsuario.ADMIN);
         return adminEntity;
     }
 

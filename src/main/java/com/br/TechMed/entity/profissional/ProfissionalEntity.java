@@ -1,6 +1,7 @@
 package com.br.TechMed.entity.profissional;
 
 import com.br.TechMed.Enum.StatusUsuario;
+import com.br.TechMed.Enum.TipoUsuario;
 import com.br.TechMed.entity.clinica.ProfissionaisClinicaEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -100,6 +101,10 @@ public class ProfissionalEntity {
 
     @Enumerated(EnumType.STRING)
     private StatusUsuario StatusProfissional;
+
+    @Column(name = "tipo_usuario")
+    @Enumerated
+    private TipoUsuario tipoUsuario;
 
     public ProfissionalEntity(Long id) {
         this.id = id;

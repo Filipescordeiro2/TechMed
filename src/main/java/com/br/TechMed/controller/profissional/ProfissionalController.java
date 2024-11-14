@@ -65,8 +65,9 @@ public class ProfissionalController {
             @RequestParam(required = false) String statusAgenda,
             @RequestParam(required = false) LocalDate data,
             @RequestParam(required = false) LocalTime hora,
-            @RequestParam(required = false) String nomeProfissional) {
-        List<AgendaDetalhadaDTO> agenda = profissionalService.getAgendaByProfissional(profissionalId, clinicaId, statusAgenda, data, hora, nomeProfissional);
+            @RequestParam(required = false) String nomeProfissional,
+            @RequestParam(required = false) String nomeEspecialidade) {
+        List<AgendaDetalhadaDTO> agenda = profissionalService.getAgendaByProfissional(profissionalId, clinicaId, statusAgenda, data, hora, nomeProfissional,nomeEspecialidade);
         return ResponseEntity.ok(agenda);
     }
 
@@ -90,6 +91,17 @@ public class ProfissionalController {
     public ResponseEntity<List<EspecialidadeProfissionalDTO>> buscarEspecialidadePorProfissionalId(@RequestParam Long profissionalId) {
         List<EspecialidadeProfissionalDTO> especialidades = especialidadeProfissionalService.buscarEspecialidadePorProfissionalId(profissionalId);
         return ResponseEntity.ok(especialidades);
+    }
+
+    /**
+     * Lista todos os profissionais ativos.
+     *
+     * @return a lista de profissionais ativos
+     */
+    @GetMapping("/ativos")
+    public ResponseEntity<List<ProfissionalDTO>> listarProfissionaisAtivos() {
+        List<ProfissionalDTO> profissionaisAtivos = profissionalService.listarProfissionaisAtivos();
+        return ResponseEntity.ok(profissionaisAtivos);
     }
 
 }

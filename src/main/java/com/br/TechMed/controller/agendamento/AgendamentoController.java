@@ -1,10 +1,13 @@
 package com.br.TechMed.controller.agendamento;
 
 import com.br.TechMed.dto.agendamento.AgendamentoDTO;
+import com.br.TechMed.dto.agendamento.AgendamentoDetalhadaDTO;
 import com.br.TechMed.service.servicos.agendamento.AgendamentoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/agendamentos")
@@ -19,4 +22,12 @@ public class AgendamentoController {
         AgendamentoDTO novoAgendamento = agendamentoService.criarAgendamento(agendamentoDTO);
         return ResponseEntity.ok(novoAgendamento);
     }
+
+    @GetMapping("/detalhado")
+    public ResponseEntity<List<AgendamentoDetalhadaDTO>> getAgendamentoDetalhado(
+            @RequestParam Long agendaId) {
+        List<AgendamentoDetalhadaDTO> agendamentoDetalhado = agendamentoService.getAgendamentoDetalhado(agendaId);
+        return ResponseEntity.ok(agendamentoDetalhado);
+    }
+
 }

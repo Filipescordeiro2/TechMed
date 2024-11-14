@@ -50,4 +50,19 @@ public enum Especialidades {
                 return "Descrição não disponível.";
         }
     }
+
+    /**
+     * Converte uma string para uma instância da enumeração, ignorando maiúsculas e minúsculas.
+     *
+     * @param nomeEspecialidade o nome da especialidade
+     * @return a instância da enumeração correspondente
+     */
+    public static Especialidades fromStringIgnoreCase(String nomeEspecialidade) {
+        for (Especialidades especialidade : Especialidades.values()) {
+            if (especialidade.name().equalsIgnoreCase(nomeEspecialidade)) {
+                return especialidade;
+            }
+        }
+        throw new IllegalArgumentException("Especialidade não encontrada: " + nomeEspecialidade);
+    }
 }

@@ -1,6 +1,7 @@
 package com.br.TechMed.dto.Clinica;
 
 import com.br.TechMed.Enum.StatusUsuario;
+import com.br.TechMed.Enum.TipoUsuario;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,9 @@ public class ClinicaDTO {
     private String celular;
 
     private StatusUsuario StatusClinica;
+
+    private TipoUsuario tipoUsuario;
+
 
     @Email
     @NotNull(message = "Email é obrigatório")

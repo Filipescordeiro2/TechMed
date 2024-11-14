@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("agendas")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000") // Permite apenas o domínio do frontend
+@CrossOrigin(origins = "http://localhost:3000")
 public class AgendaController {
 
     private final AgendaService agendaService;
@@ -126,5 +126,17 @@ public class AgendaController {
     public ResponseEntity<List<AgendaDTO>> buscarAgendaPorStatus(@RequestParam StatusAgenda status) {
         List<AgendaDTO> agenda = agendaService.buscarAgendaPorStatus(status);
         return ResponseEntity.ok(agenda);
+    }
+
+    /**
+     * Cancela uma agenda pelo ID.
+     *
+     * @param agendaId o ID da agenda a ser cancelada
+     * @return uma resposta vazia com status 204 (No Content)
+     */
+    @PatchMapping("/cancelarAgenda")
+    public ResponseEntity<Void> cancelarAgenda(@RequestParam Long agendaId) {
+        agendaService.cancelarAgenda(agendaId);
+        return ResponseEntity.noContent().build();
     }
 }

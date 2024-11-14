@@ -27,4 +27,6 @@ public interface AgendaService {
     void criarAgendaAvulso(Long profissionalId, LocalDate data, LocalTime hora, Long clinicaId, Long especialidadeId);
     List<AgendaDTO> buscarAgendaPorStatus(StatusAgenda status);
     List<AgendaDetalhadaDTO> buscarAgenda(Long profissionalId, Long clinicaId, String statusAgenda, LocalDate data, LocalTime hora, String nomeProfissional, Jornada periodo);
+    // Altera o status da agenda para CANCELADO
+    void cancelarAgenda(Long agendaId);
 }

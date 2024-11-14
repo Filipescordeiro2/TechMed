@@ -15,7 +15,8 @@ public interface ProfissionalService {
 
     ProfissionalDTO cadastrarProfissional(ProfissionalDTO profissionalDTO);
     ProfissionalDTO autenticarProfissional(LoginSenhaProfissionalDTO loginSenhaProfissionalDTO);
-    List<AgendaDetalhadaDTO> getAgendaByProfissional(Long profissionalId,Long clinicaId ,String statusAgenda, LocalDate data, LocalTime hora, String nomeProfissional);
+    List<AgendaDetalhadaDTO> getAgendaByProfissional(Long profissionalId, Long clinicaId, String statusAgenda, LocalDate data, LocalTime hora, String nomeProfissional, String nomeEspecialidade);
     long contarProfissionais();
     void atualizarStatusProfissional(Long id);
+    List<ProfissionalDTO> listarProfissionaisAtivos();
 }

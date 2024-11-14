@@ -1,5 +1,6 @@
 package com.br.TechMed.entity.adm;
 
+import com.br.TechMed.Enum.TipoUsuario;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -47,4 +48,8 @@ public class AdminEntity {
 
     @Column(name = "celular_admin", unique = true)
     private String celular;
+
+    @Column(name = "tipo_usuario")
+    @Enumerated(EnumType.STRING)
+    private TipoUsuario tipoUsuario;
 }

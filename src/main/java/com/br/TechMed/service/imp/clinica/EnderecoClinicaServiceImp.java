@@ -7,6 +7,7 @@ import com.br.TechMed.repository.clinica.EnderecoClinicaRepository;
 import com.br.TechMed.service.servicos.clinica.EnderecoClinicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Implementação da interface EnderecoClinicaService.
@@ -33,6 +34,20 @@ public class EnderecoClinicaServiceImp implements EnderecoClinicaService {
         } catch (Exception e) {
             throw new RegraDeNegocioException("Erro ao salvar o endereço da clínica");
         }
+    }
+
+    /**
+     * Busca o endereço da clínica pelo ID da clínica.
+     *
+     * @param clinicaId o ID da clínica
+     * @return os dados do endereço da clínica
+     */
+    @Override
+    @Transactional
+    public EnderecoClinicaDTO buscarEnderecoPorClinicaId(Long clinicaId) {
+        EnderecoClinicaEntity enderecoEntity = enderecoClinicaRepository.findByClinicaEntityId(clinicaId)
+                .orElseThrow(() -> new RegraDeNegocioException("Endereço não encontrado para a clínica com ID: " + clinicaId));
+        return toDto(enderecoEntity);
     }
 
     /**

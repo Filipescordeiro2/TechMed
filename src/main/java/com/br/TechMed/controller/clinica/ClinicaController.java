@@ -2,7 +2,9 @@ package com.br.TechMed.controller.clinica;
 
 
 import com.br.TechMed.dto.Clinica.ClinicaDTO;
+import com.br.TechMed.dto.Clinica.EnderecoClinicaDTO;
 import com.br.TechMed.service.servicos.clinica.ClinicaService;
+import com.br.TechMed.service.servicos.clinica.EnderecoClinicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,9 @@ public class ClinicaController {
 
     @Autowired
     private ClinicaService clinicaService;
+
+    @Autowired
+    private EnderecoClinicaService enderecoClinicaService;
 
     @PostMapping
     public ClinicaDTO cadastrarClinica(@RequestBody ClinicaDTO clinicaDTO) {
@@ -43,5 +48,11 @@ public class ClinicaController {
     @PatchMapping("/inativarClinica/{id}")
     public void updateStatus(@PathVariable("id") Long id) {
         clinicaService.atualizarStatusClinica(id);
+    }
+
+    @GetMapping("/endereco")
+    public ResponseEntity<EnderecoClinicaDTO> buscarEnderecoPorClinicaId(@RequestParam Long clinicaId) {
+        EnderecoClinicaDTO enderecoClinicaDTO = enderecoClinicaService.buscarEnderecoPorClinicaId(clinicaId);
+        return ResponseEntity.ok(enderecoClinicaDTO);
     }
 }
