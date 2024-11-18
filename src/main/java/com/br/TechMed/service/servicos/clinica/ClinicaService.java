@@ -1,6 +1,7 @@
 package com.br.TechMed.service.servicos.clinica;
 
 import com.br.TechMed.dto.Clinica.ClinicaDTO;
+import com.br.TechMed.dto.profissional.ProfissionalDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +12,7 @@ public interface ClinicaService {
     List<ClinicaDTO> listarTodasClinicas();
     long contarClinicas();
     void atualizarStatusClinica(Long id);
+    List<ClinicaDTO> listarClinicasAtivos();
 
 
 }

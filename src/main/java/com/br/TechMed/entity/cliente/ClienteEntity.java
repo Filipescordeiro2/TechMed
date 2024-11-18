@@ -9,7 +9,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.br.CPF;
 
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -83,6 +86,12 @@ public class ClienteEntity {
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipoUsuario;
 
+    @Column(name="data_nascimento")
+    private LocalDate dataNascimento;
+
+    @Column(name = "idade")
+    private Integer idade;
+
     /**
      * Lista de endereços do cliente.
      */
@@ -91,5 +100,13 @@ public class ClienteEntity {
 
     public ClienteEntity(Long id) {
         this.id = id;
+    }
+
+    @PrePersist
+    @PreUpdate
+    private void calcularIdade() {
+        if (this.dataNascimento != null) {
+            this.idade = Period.between(this.dataNascimento, LocalDate.now()).getYears();
+        }
     }
 }

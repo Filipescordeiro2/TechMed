@@ -1,12 +1,16 @@
 package com.br.TechMed.service.imp.clinica;
 
 import com.br.TechMed.dto.Clinica.EspecialidadeClinicaDTO;
+import com.br.TechMed.dto.profissional.EspecialidadeProfissionalDTO;
 import com.br.TechMed.entity.clinica.EspecialidadeClinicaEntity;
 import com.br.TechMed.exception.RegraDeNegocioException;
 import com.br.TechMed.repository.clinica.EspecialidadeClinicaRepository;
 import com.br.TechMed.service.servicos.clinica.EspecialidadeClinicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementação da interface EspecialidadeClinicaService.
@@ -33,6 +37,14 @@ public class EspecialidadeClinicaImp implements EspecialidadeClinicaService {
         } catch (Exception e) {
             throw new RegraDeNegocioException("Erro ao salvar a especialidade da clínica");
         }
+    }
+
+    @Override
+    public List<EspecialidadeClinicaDTO> buscarEspecialidadePorClinicaId(Long clinicaId) {
+        return especialidadeClinicaRepository.findByClinicaEntityId(clinicaId)
+                .stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
     /**

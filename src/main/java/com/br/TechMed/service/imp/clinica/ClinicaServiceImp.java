@@ -6,6 +6,7 @@ import com.br.TechMed.dto.Clinica.ClinicaDTO;
 import com.br.TechMed.dto.Clinica.EnderecoClinicaDTO;
 import com.br.TechMed.dto.Clinica.EspecialidadeClinicaDTO;
 import com.br.TechMed.dto.Clinica.ProfissionaisClinicaDTO;
+import com.br.TechMed.dto.profissional.ProfissionalDTO;
 import com.br.TechMed.entity.adm.ClinicasAdminEntity;
 import com.br.TechMed.entity.clinica.ClinicaEntity;
 import com.br.TechMed.entity.clinica.EnderecoClinicaEntity;
@@ -259,6 +260,14 @@ public class ClinicaServiceImp implements ClinicaService {
                 .orElseThrow(() -> new RegraDeNegocioException("Clínica não encontrada"));
         clinicaEntity.setStatusClinica(StatusUsuario.INATIVO);
         clinicaRepository.save(clinicaEntity);
+    }
+
+    @Override
+    public List<ClinicaDTO> listarClinicasAtivos() {
+        return clinicaRepository.findAll().stream()
+                .filter(clinica -> clinica.getStatusClinica() == StatusUsuario.ATIVO)
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 
 

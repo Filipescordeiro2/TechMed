@@ -3,8 +3,11 @@ package com.br.TechMed.controller.clinica;
 
 import com.br.TechMed.dto.Clinica.ClinicaDTO;
 import com.br.TechMed.dto.Clinica.EnderecoClinicaDTO;
+import com.br.TechMed.dto.Clinica.EspecialidadeClinicaDTO;
+import com.br.TechMed.dto.profissional.ProfissionalDTO;
 import com.br.TechMed.service.servicos.clinica.ClinicaService;
 import com.br.TechMed.service.servicos.clinica.EnderecoClinicaService;
+import com.br.TechMed.service.servicos.clinica.EspecialidadeClinicaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +25,9 @@ public class ClinicaController {
 
     @Autowired
     private EnderecoClinicaService enderecoClinicaService;
+
+    @Autowired
+    private EspecialidadeClinicaService especialidadeClinicaService;
 
     @PostMapping
     public ClinicaDTO cadastrarClinica(@RequestBody ClinicaDTO clinicaDTO) {
@@ -54,5 +60,16 @@ public class ClinicaController {
     public ResponseEntity<EnderecoClinicaDTO> buscarEnderecoPorClinicaId(@RequestParam Long clinicaId) {
         EnderecoClinicaDTO enderecoClinicaDTO = enderecoClinicaService.buscarEnderecoPorClinicaId(clinicaId);
         return ResponseEntity.ok(enderecoClinicaDTO);
+    }
+
+    @GetMapping("/especialidadesClinica")
+    public List<EspecialidadeClinicaDTO> buscarEspecialidadePorClinicaId(@RequestParam Long clinicaId) {
+        return especialidadeClinicaService.buscarEspecialidadePorClinicaId(clinicaId);
+    }
+
+    @GetMapping("/ativos")
+    public ResponseEntity<List<ClinicaDTO>> listarClinicaAtivos() {
+        List<ClinicaDTO> clinicaAtivos = clinicaService.listarClinicasAtivos();
+        return ResponseEntity.ok(clinicaAtivos);
     }
 }

@@ -105,6 +105,8 @@ public class ClienteServiceImp implements ClienteService {
         clienteDTO.setCpf(clienteEntity.getCpf());
         clienteDTO.setCelular(clienteEntity.getCelular());
         clienteDTO.setEnderecoCliente(toDto(clienteEntity.getEnderecos().get(0)));
+        clienteDTO.setDataNascimento(clienteEntity.getDataNascimento()); // Add this line
+        clienteDTO.setIdade(clienteEntity.getIdade()); // Add this line
         return clienteDTO;
     }
 
@@ -123,6 +125,7 @@ public class ClienteServiceImp implements ClienteService {
         clienteEntity.setEmail(clienteDTO.getEmail());
         clienteEntity.setCpf(clienteDTO.getCpf());
         clienteEntity.setCelular(clienteDTO.getCelular());
+        clienteEntity.setDataNascimento(clienteDTO.getDataNascimento());
         return clienteEntity;
     }
 
