@@ -1,9 +1,6 @@
 package com.br.TechMed.controller.prontuarioMedico;
 
-import com.br.TechMed.dto.prontuarioMedico.ExamesClienteDTO;
-import com.br.TechMed.dto.prontuarioMedico.MedicamentosClienteDTO;
-import com.br.TechMed.dto.prontuarioMedico.ProcedimentosClienteDTO;
-import com.br.TechMed.dto.prontuarioMedico.ProtuarioMedicoDTO;
+import com.br.TechMed.dto.prontuarioMedico.*;
 import com.br.TechMed.service.servicos.prontuarioMedicoService.ProntuarioMedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,8 +24,26 @@ public class ProntuarioMedicoController {
     }
 
     @GetMapping("/cliente")
-    public ResponseEntity<List<ProtuarioMedicoDTO>> getProntuarioByClienteId(@RequestParam Long clienteId) {
-        List<ProtuarioMedicoDTO> prontuarioMedicoDTOs = prontuarioMedicoService.findByClienteId(clienteId);
+    public ResponseEntity<List<ProtuarioMedicoDetalhadoDTO>> getProntuarioByClienteId(@RequestParam Long clienteId) {
+        List<ProtuarioMedicoDetalhadoDTO> prontuarioMedicoDTOs = prontuarioMedicoService.findByClienteId(clienteId);
+        if (prontuarioMedicoDTOs.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(prontuarioMedicoDTOs);
+    }
+
+    @GetMapping("/cliente/cpf")
+    public ResponseEntity<List<ProtuarioMedicoDetalhadoDTO>> getProntuarioByCpf(@RequestParam String cpf) {
+        List<ProtuarioMedicoDetalhadoDTO> prontuarioMedicoDTOs = prontuarioMedicoService.findByCpf(cpf);
+        if (prontuarioMedicoDTOs.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(prontuarioMedicoDTOs);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<List<ProtuarioMedicoDetalhadoDTO>> getProntuarioById(@PathVariable Long id) {
+        List<ProtuarioMedicoDetalhadoDTO> prontuarioMedicoDTOs = prontuarioMedicoService.findById(id);
         if (prontuarioMedicoDTOs.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

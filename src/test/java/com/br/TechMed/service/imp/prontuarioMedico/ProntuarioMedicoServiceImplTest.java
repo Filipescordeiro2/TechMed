@@ -1,6 +1,7 @@
 package com.br.TechMed.service.imp.prontuarioMedico;
 
 import com.br.TechMed.dto.prontuarioMedico.ProtuarioMedicoDTO;
+import com.br.TechMed.dto.prontuarioMedico.ProtuarioMedicoDetalhadoDTO;
 import com.br.TechMed.entity.cliente.ClienteEntity;
 import com.br.TechMed.entity.profissional.ProfissionalEntity;
 import com.br.TechMed.entity.protuarioMedico.ProtuarioMedicoEntity;
@@ -114,7 +115,7 @@ public class ProntuarioMedicoServiceImplTest {
     void testFindByClienteId() {
         when(protuarioMedicoRepository.findByClienteId(1L)).thenReturn(Collections.singletonList(protuarioMedicoEntity));
 
-        List<ProtuarioMedicoDTO> result = prontuarioMedicoService.findByClienteId(1L);
+        List<ProtuarioMedicoDetalhadoDTO> result = prontuarioMedicoService.findByClienteId(1L);
 
         assertNotNull(result);
         assertEquals(1, result.size());

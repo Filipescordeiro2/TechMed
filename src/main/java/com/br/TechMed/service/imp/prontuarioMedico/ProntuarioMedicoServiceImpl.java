@@ -1,9 +1,6 @@
 package com.br.TechMed.service.imp.prontuarioMedico;
 
-import com.br.TechMed.dto.prontuarioMedico.ExamesClienteDTO;
-import com.br.TechMed.dto.prontuarioMedico.MedicamentosClienteDTO;
-import com.br.TechMed.dto.prontuarioMedico.ProcedimentosClienteDTO;
-import com.br.TechMed.dto.prontuarioMedico.ProtuarioMedicoDTO;
+import com.br.TechMed.dto.prontuarioMedico.*;
 import com.br.TechMed.entity.cliente.ClienteEntity;
 import com.br.TechMed.entity.clinica.ClinicaEntity;
 import com.br.TechMed.entity.protuarioMedico.ExamesClienteEntity;
@@ -109,30 +106,81 @@ public class ProntuarioMedicoServiceImpl implements ProntuarioMedicoService {
         return medicamentosClienteRepository.count();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProtuarioMedicoDetalhadoDTO> findByCpf(String cpf) {
+        if (cpf == null || cpf.isEmpty()) {
+            throw new IllegalArgumentException("CPF do cliente é obrigatório");
+        }
+        Long clienteId = getClienteIdByCpf(cpf);
+        return findByClienteId(clienteId);
+    }
 
     @Override
     @Transactional(readOnly = true)
-    public List<ProtuarioMedicoDTO> findByClienteId(Long clienteId) {
+    public List<ProtuarioMedicoDetalhadoDTO> findByClienteId(Long clienteId) {
         List<ProtuarioMedicoEntity> prontuariosMedicos = protuarioMedicoRepository.findByClienteId(clienteId);
         return prontuariosMedicos.stream().map(protuarioMedico -> {
-            ProtuarioMedicoDTO dto = new ProtuarioMedicoDTO();
+            ProtuarioMedicoDetalhadoDTO dto = new ProtuarioMedicoDetalhadoDTO();
             dto.setId(protuarioMedico.getId());
             dto.setProfissionalId(protuarioMedico.getProfissional().getId());
-            dto.setCpf(protuarioMedico.getCliente().getCpf()); // Set CPF instead of clienteId
+            dto.setProfissionalNome(protuarioMedico.getProfissional().getNome());
+            dto.setProfissionalSobrenome(protuarioMedico.getProfissional().getSobrenome());
+            dto.setClienteId(protuarioMedico.getCliente().getId());
+            dto.setClienteNome(protuarioMedico.getCliente().getNome());
+            dto.setClienteSobrenome(protuarioMedico.getCliente().getSobrenome());
+            dto.setDataNascimento(protuarioMedico.getCliente().getDataNascimento());
+            dto.setIdade(protuarioMedico.getCliente().getIdade());
+            dto.setClinicaId(protuarioMedico.getClinica().getId());
+            dto.setClinicaNome(protuarioMedico.getClinica().getNomeClinica());
+            dto.setCpf(protuarioMedico.getCliente().getCpf());
             dto.setDescricao(protuarioMedico.getDescricao());
             dto.setDataConsulta(protuarioMedico.getDataConsulta());
             dto.setExames(protuarioMedico.getExames().stream()
-                .map(exame -> new ExamesClienteDTO(exame.getId(), exame.getProtuarioMedico().getId(), exame.getExame()))
-                .collect(Collectors.toList()));
+                    .map(exame -> new ExamesClienteDTO(exame.getId(), exame.getProtuarioMedico().getId(), exame.getExame()))
+                    .collect(Collectors.toList()));
             dto.setProcedimentos(protuarioMedico.getProcedimentos().stream()
-                .map(procedimento -> new ProcedimentosClienteDTO(procedimento.getId(), procedimento.getProtuarioMedico().getId(), procedimento.getProcedimento()))
-                .collect(Collectors.toList()));
+                    .map(procedimento -> new ProcedimentosClienteDTO(procedimento.getId(), procedimento.getProtuarioMedico().getId(), procedimento.getProcedimento()))
+                    .collect(Collectors.toList()));
             dto.setMedicamentos(protuarioMedico.getMedicamentos().stream()
-                .map(medicamento -> new MedicamentosClienteDTO(medicamento.getId(), medicamento.getProtuarioMedico().getId(), medicamento.getMedicamento()))
-                .collect(Collectors.toList()));
-            dto.setObservacoes(protuarioMedico.getObservacoes());
+                    .map(medicamento -> new MedicamentosClienteDTO(medicamento.getId(), medicamento.getProtuarioMedico().getId(), medicamento.getMedicamento()))
+                    .collect(Collectors.toList()));
+            dto.setObservacoes(String.valueOf(protuarioMedico.getObservacoes()));
             return dto;
         }).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ProtuarioMedicoDetalhadoDTO> findById(Long id) {
+        ProtuarioMedicoEntity prontuarioMedico = protuarioMedicoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Prontuário não encontrado para o ID fornecido"));
+        ProtuarioMedicoDetalhadoDTO dto = new ProtuarioMedicoDetalhadoDTO();
+        dto.setId(prontuarioMedico.getId());
+        dto.setProfissionalId(prontuarioMedico.getProfissional().getId());
+        dto.setProfissionalNome(prontuarioMedico.getProfissional().getNome());
+        dto.setProfissionalSobrenome(prontuarioMedico.getProfissional().getSobrenome());
+        dto.setClienteId(prontuarioMedico.getCliente().getId());
+        dto.setClienteNome(prontuarioMedico.getCliente().getNome());
+        dto.setClienteSobrenome(prontuarioMedico.getCliente().getSobrenome());
+        dto.setDataNascimento(prontuarioMedico.getCliente().getDataNascimento());
+        dto.setIdade(prontuarioMedico.getCliente().getIdade());
+        dto.setClinicaId(prontuarioMedico.getClinica().getId());
+        dto.setClinicaNome(prontuarioMedico.getClinica().getNomeClinica());
+        dto.setCpf(prontuarioMedico.getCliente().getCpf());
+        dto.setDescricao(prontuarioMedico.getDescricao());
+        dto.setDataConsulta(prontuarioMedico.getDataConsulta());
+        dto.setExames(prontuarioMedico.getExames().stream()
+                .map(exame -> new ExamesClienteDTO(exame.getId(), exame.getProtuarioMedico().getId(), exame.getExame()))
+                .collect(Collectors.toList()));
+        dto.setProcedimentos(prontuarioMedico.getProcedimentos().stream()
+                .map(procedimento -> new ProcedimentosClienteDTO(procedimento.getId(), procedimento.getProtuarioMedico().getId(), procedimento.getProcedimento()))
+                .collect(Collectors.toList()));
+        dto.setMedicamentos(prontuarioMedico.getMedicamentos().stream()
+                .map(medicamento -> new MedicamentosClienteDTO(medicamento.getId(), medicamento.getProtuarioMedico().getId(), medicamento.getMedicamento()))
+                .collect(Collectors.toList()));
+        dto.setObservacoes(String.valueOf(prontuarioMedico.getObservacoes()));
+        return List.of(dto);
     }
 
     @Override

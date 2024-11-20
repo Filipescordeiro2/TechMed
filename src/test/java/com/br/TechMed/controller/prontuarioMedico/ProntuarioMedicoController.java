@@ -1,6 +1,7 @@
 package com.br.TechMed.controller.prontuarioMedico;
 
 import com.br.TechMed.dto.prontuarioMedico.ProtuarioMedicoDTO;
+import com.br.TechMed.dto.prontuarioMedico.ProtuarioMedicoDetalhadoDTO;
 import com.br.TechMed.service.servicos.prontuarioMedicoService.ProntuarioMedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,8 @@ public class ProntuarioMedicoController {
     }
 
     @GetMapping("/cliente")
-    public ResponseEntity<List<ProtuarioMedicoDTO>> getProntuarioByClienteId(@RequestParam Long clienteId) {
-        List<ProtuarioMedicoDTO> prontuarioMedicoDTOs = prontuarioMedicoService.findByClienteId(clienteId);
+    public ResponseEntity<List<ProtuarioMedicoDetalhadoDTO>> getProntuarioByClienteId(@RequestParam Long clienteId) {
+        List<ProtuarioMedicoDetalhadoDTO> prontuarioMedicoDTOs = prontuarioMedicoService.findByClienteId(clienteId);
         if (prontuarioMedicoDTOs.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

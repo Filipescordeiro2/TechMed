@@ -31,7 +31,7 @@ public class ProtuarioMedicoEntity {
     @ManyToOne
     private ClinicaEntity clinica;
 
-    @Column(name = "descricao", length = 500)
+    @Column(name = "descricao", length = 10000)
     private String descricao;
 
     @Column(name = "data_consulta")
