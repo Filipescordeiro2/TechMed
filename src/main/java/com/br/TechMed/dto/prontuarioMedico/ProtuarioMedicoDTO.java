@@ -23,4 +23,5 @@ public class ProtuarioMedicoDTO {
     private List<String> observacoes;
     private String cpf;
 
+
 }

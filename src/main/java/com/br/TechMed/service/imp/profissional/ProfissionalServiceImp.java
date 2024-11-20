@@ -143,6 +143,9 @@ public class ProfissionalServiceImp implements ProfissionalService {
         profissionalDTO.setCelular(profissionalEntity.getCelular());
         profissionalDTO.setStatusProfissional(profissionalEntity.getStatusProfissional()); // Corrigido
         profissionalDTO.setTipoUsuario(profissionalEntity.getTipoUsuario()); // Corrigido
+        profissionalDTO.setOrgaoRegulador(profissionalEntity.getOrgaoRegulador());
+        profissionalDTO.setNumeroRegistro(profissionalEntity.getNumeroRegistro());
+        profissionalDTO.setUfOrgaoRegulador(profissionalEntity.getUfOrgaoRegulador());
 
         if (!profissionalEntity.getEnderecos().isEmpty()) {
             List<EnderecoProfissionalDTO> enderecoDTOs = profissionalEntity.getEnderecos().stream()
@@ -205,6 +208,9 @@ public class ProfissionalServiceImp implements ProfissionalService {
         profissionalEntity.setCelular(profissionalDTO.getCelular());
         profissionalEntity.setStatusProfissional(StatusUsuario.ATIVO);
         profissionalEntity.setTipoUsuario(TipoUsuario.MEDICO);
+        profissionalEntity.setOrgaoRegulador(profissionalDTO.getOrgaoRegulador());
+        profissionalEntity.setNumeroRegistro(profissionalDTO.getNumeroRegistro());
+        profissionalEntity.setUfOrgaoRegulador(profissionalDTO.getUfOrgaoRegulador());
         return profissionalEntity;
     }
 
@@ -344,5 +350,11 @@ public class ProfissionalServiceImp implements ProfissionalService {
                 .filter(profissional -> profissional.getStatusProfissional() == StatusUsuario.ATIVO)
                 .map(this::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public boolean isCpfDuplicado(String cpf) {
+        return profissionalRepository.existsByCpf(cpf);
     }
 }

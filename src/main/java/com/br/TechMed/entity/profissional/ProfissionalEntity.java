@@ -75,6 +75,18 @@ public class ProfissionalEntity {
     @NotNull(message = "CPF é obrigatório")
     private String cpf;
 
+    @Column(name = "orgao_Regulador")
+    @NotNull(message = "Orgão regulador é obrigatório")
+    private String orgaoRegulador;
+
+    @Column(name = "numero_Registro")
+    @NotNull(message = "Número de registro é obrigatório")
+    private String numeroRegistro;
+
+    @Column(name = "UF_orgao_Regulador")
+    @NotNull(message = "UF do orgão regulador é obrigatório")
+    private String ufOrgaoRegulador;
+
     /**
      * Celular do profissional.
      */

@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface ProfissionalRepository extends JpaRepository<ProfissionalEntity,Long> {
     Optional<ProfissionalEntity> findByLogin(String login);
+    boolean existsByCpf(String cpf);
 
 }

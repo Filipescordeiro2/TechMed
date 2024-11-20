@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Controlador responsável por gerenciar as operações relacionadas aos profissionais no sistema.
@@ -102,6 +104,14 @@ public class ProfissionalController {
     public ResponseEntity<List<ProfissionalDTO>> listarProfissionaisAtivos() {
         List<ProfissionalDTO> profissionaisAtivos = profissionalService.listarProfissionaisAtivos();
         return ResponseEntity.ok(profissionaisAtivos);
+    }
+
+    @GetMapping("/verificar-cpf/{cpf}")
+    public ResponseEntity<Map<String, Boolean>> verificarCpfDuplicado(@PathVariable String cpf) {
+        boolean duplicado = profissionalService.isCpfDuplicado(cpf);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("duplicado", duplicado);
+        return ResponseEntity.ok(response);
     }
 
 }

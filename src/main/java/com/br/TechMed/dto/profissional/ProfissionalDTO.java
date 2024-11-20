@@ -46,6 +46,10 @@ public class ProfissionalDTO {
 
     private TipoUsuario tipoUsuario;
 
+    private String orgaoRegulador;
+    private String numeroRegistro;
+    private String ufOrgaoRegulador;
+
     private List<EspecialidadeProfissionalDTO> especialidades;
 
     private List<ProfissionaisClinicaDTO> clinicas;

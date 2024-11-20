@@ -19,4 +19,6 @@ public interface ProfissionalService {
     long contarProfissionais();
     void atualizarStatusProfissional(Long id);
     List<ProfissionalDTO> listarProfissionaisAtivos();
+
+    boolean isCpfDuplicado(String cpf);
 }
