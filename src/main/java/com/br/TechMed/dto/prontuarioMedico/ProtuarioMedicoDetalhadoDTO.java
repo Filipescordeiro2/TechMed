@@ -26,6 +26,9 @@ public class ProtuarioMedicoDetalhadoDTO {
     private List<ProcedimentosClienteDTO> procedimentos;
     private List<MedicamentosClienteDTO> medicamentos;
     private String observacoes;
+    private String numeroRegistro;
+    private String orgaoRegulador;
+    private String ufRegistro;
 
 
 }

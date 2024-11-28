@@ -112,6 +112,9 @@ public class ClinicaServiceImp implements ClinicaService {
         }
     }
 
+
+
+
     /**
      * Converte uma entidade ClinicaEntity para um DTO ClinicaDTO.
      *

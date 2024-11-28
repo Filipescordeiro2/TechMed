@@ -10,5 +10,6 @@ public interface ClienteService {
     ClienteDTO buscarClientePorCpf(String cpf);
     ClienteDTO autenticarCliente(LoginSenhaClienteDTO loginSenhaClienteDTO);
     long contarClientes();
+    ClienteDTO atualizarCliente(Long id, ClienteDTO clienteDTO); // Adicione este método
 
 }

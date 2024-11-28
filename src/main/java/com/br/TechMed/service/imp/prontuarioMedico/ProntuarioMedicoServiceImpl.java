@@ -160,6 +160,9 @@ public class ProntuarioMedicoServiceImpl implements ProntuarioMedicoService {
         dto.setProfissionalId(prontuarioMedico.getProfissional().getId());
         dto.setProfissionalNome(prontuarioMedico.getProfissional().getNome());
         dto.setProfissionalSobrenome(prontuarioMedico.getProfissional().getSobrenome());
+        dto.setOrgaoRegulador(prontuarioMedico.getProfissional().getOrgaoRegulador());
+        dto.setNumeroRegistro(prontuarioMedico.getProfissional().getNumeroRegistro());
+        dto.setUfRegistro(prontuarioMedico.getProfissional().getUfOrgaoRegulador());
         dto.setClienteId(prontuarioMedico.getCliente().getId());
         dto.setClienteNome(prontuarioMedico.getCliente().getNome());
         dto.setClienteSobrenome(prontuarioMedico.getCliente().getSobrenome());

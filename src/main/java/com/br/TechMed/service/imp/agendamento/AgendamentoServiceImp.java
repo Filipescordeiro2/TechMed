@@ -144,4 +144,47 @@ public class AgendamentoServiceImp implements AgendamentoService {
 
         return List.of(dto);
     }
+
+    @Override
+    @Transactional
+    public List<AgendamentoDetalhadaDTO> getAgendamentoDetalhadoPorCpf(String cpf) {
+        if (cpf == null || cpf.isEmpty()) {
+            throw new IllegalArgumentException("O CPF do cliente não pode ser nulo ou vazio");
+        }
+
+        ClienteEntity cliente = clienteRepository.findByCpf(cpf)
+                .orElseThrow(() -> new RegraDeNegocioException("Cliente não encontrado"));
+
+        List<AgendamentoEntity> agendamentos = agendamentoRepository.findByCliente(cliente);
+
+        if (agendamentos.isEmpty()) {
+            throw new RegraDeNegocioException("Nenhum agendamento encontrado para o cliente fornecido");
+        }
+
+        return agendamentos.stream().map(agendamento -> {
+            AgendaEntity agenda = agendamento.getAgenda();
+            AgendamentoDetalhadaDTO dto = new AgendamentoDetalhadaDTO();
+            dto.setCodigoAgenda(agenda.getId());
+            dto.setCodigoClinica(agenda.getClinicaEntity().getId());
+            dto.setData(agenda.getData());
+            dto.setHora(agenda.getHora());
+            dto.setPeriodoAgenda(agenda.getJornada().name());
+            dto.setStatusAgenda(agenda.getStatusAgenda().name());
+            dto.setClinica(agenda.getClinicaEntity().getNomeClinica());
+            dto.setEmailClinica(agenda.getClinicaEntity().getEmail());
+            dto.setCelularClinica(agenda.getClinicaEntity().getCelular());
+            dto.setNomeProfissional(agenda.getProfissional().getNome());
+            dto.setSobrenomeProfissional(agenda.getProfissional().getSobrenome());
+            dto.setNomeEspecialidadeProfissional(String.valueOf(agenda.getEspecialidadeProfissionalEntity().getEspecialidades()));
+            dto.setDescricaoEspecialidadeProfissional(agenda.getEspecialidadeProfissionalEntity().getDescricaoEspecialidade());
+            dto.setCodigoCliente(cliente.getId());
+            dto.setNomeCliente(cliente.getNome());
+            dto.setSobrenomeCliente(cliente.getSobrenome());
+            dto.setEmailCliente(cliente.getEmail());
+            dto.setCelularCliente(cliente.getCelular());
+            dto.setCpfCliente(cliente.getCpf());
+            dto.setDataDeNascimentoCliente(cliente.getDataNascimento());
+            return dto;
+        }).collect(Collectors.toList());
+    }
 }

@@ -13,4 +13,5 @@ public interface AgendamentoService {
 
     AgendamentoDTO criarAgendamento(AgendamentoDTO agendamentoDTO);
     List<AgendamentoDetalhadaDTO> getAgendamentoDetalhado(Long agendaId);
+    List<AgendamentoDetalhadaDTO> getAgendamentoDetalhadoPorCpf(String cpf);
 }

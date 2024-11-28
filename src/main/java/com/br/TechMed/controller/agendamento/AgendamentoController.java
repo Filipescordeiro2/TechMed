@@ -30,4 +30,11 @@ public class AgendamentoController {
         return ResponseEntity.ok(agendamentoDetalhado);
     }
 
+    @GetMapping("/detalhadoPorCpf")
+    public ResponseEntity<List<AgendamentoDetalhadaDTO>> getAgendamentoDetalhadoPorCpf(
+            @RequestParam String cpf) {
+        List<AgendamentoDetalhadaDTO> agendamentoDetalhado = agendamentoService.getAgendamentoDetalhadoPorCpf(cpf);
+        return ResponseEntity.ok(agendamentoDetalhado);
+    }
+
 }

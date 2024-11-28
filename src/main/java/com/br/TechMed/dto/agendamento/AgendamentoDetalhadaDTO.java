@@ -19,6 +19,7 @@ public class AgendamentoDetalhadaDTO {
     private String emailClinica;
     private String celularClinica;
     private String nomeProfissional;
+    private String sobrenomeProfissional;
     private String nomeEspecialidadeProfissional;
     private String descricaoEspecialidadeProfissional;
     private Long codigoCliente;
@@ -27,4 +28,5 @@ public class AgendamentoDetalhadaDTO {
     private String emailCliente;
     private String celularCliente;
     private String cpfCliente;
+    private LocalDate dataDeNascimentoCliente;
 }

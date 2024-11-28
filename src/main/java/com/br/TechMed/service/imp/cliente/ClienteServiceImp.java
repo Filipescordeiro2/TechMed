@@ -7,6 +7,7 @@ import com.br.TechMed.entity.cliente.ClienteEntity;
 import com.br.TechMed.entity.cliente.EnderecoClienteEntity;
 import com.br.TechMed.exception.RegraDeNegocioException;
 import com.br.TechMed.repository.cliente.ClienteRepository;
+import com.br.TechMed.repository.cliente.EnderecoClienteRepository;
 import com.br.TechMed.service.servicos.cliente.ClienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class ClienteServiceImp implements ClienteService {
 
     @Autowired
     private ClienteRepository clienteRepository;
+
+    @Autowired
+    private EnderecoClienteRepository enderecoClienteRepository;
 
     /**
      * Cadastra um novo cliente no sistema.
@@ -110,6 +114,8 @@ public class ClienteServiceImp implements ClienteService {
         return clienteDTO;
     }
 
+
+
     /**
      * Converte um DTO ClienteDTO para uma entidade ClienteEntity.
      *
@@ -167,4 +173,30 @@ public class ClienteServiceImp implements ClienteService {
         enderecoEntity.setPais(enderecoDTO.getPais());
         return enderecoEntity;
     }
+
+    @Override
+    @Transactional
+    public ClienteDTO atualizarCliente(Long id, ClienteDTO clienteDTO) {
+        ClienteEntity clienteEntity = clienteRepository.findById(id)
+                .orElseThrow(() -> new RegraDeNegocioException("Cliente não encontrado com o ID: " + id));
+
+        clienteEntity.setNome(clienteDTO.getNome());
+        clienteEntity.setSobrenome(clienteDTO.getSobrenome());
+        clienteEntity.setEmail(clienteDTO.getEmail());
+        clienteEntity.setCpf(clienteDTO.getCpf());
+        clienteEntity.setCelular(clienteDTO.getCelular());
+        clienteEntity.setDataNascimento(clienteDTO.getDataNascimento());
+        clienteEntity.setSenha(clienteDTO.getSenha());
+
+        EnderecoClienteEntity enderecoEntity = fromDto(clienteDTO.getEnderecoCliente());
+        enderecoEntity = enderecoClienteRepository.save(enderecoEntity);
+        clienteEntity.getEnderecos().clear();
+        clienteEntity.getEnderecos().add(enderecoEntity);
+        enderecoEntity.setClienteEntity(clienteEntity);
+
+        clienteEntity = clienteRepository.save(clienteEntity);
+
+        return toDto(clienteEntity);
+    }
+
 }
