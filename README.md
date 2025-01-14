@@ -1,7 +1,7 @@
 # MVP - TechMed
 
 ## 📝 Descrição do projeto
-TechMed é um microsserviço para gestão de clínicas médicas, oferecendo funcionalidades para agendamento de consultas, gerenciamento de pacientes, médicos e prontuários eletrônicos.
+TechMed é  gestor de clínicas médicas, oferecendo funcionalidades para agendamento de consultas, gerenciamento de pacientes, médicos e prontuários eletrônicos.
 
 ## 🛠️ Tecnologias usadas
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
