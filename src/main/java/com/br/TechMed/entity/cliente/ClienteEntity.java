@@ -1,6 +1,7 @@
 package com.br.TechMed.entity.cliente;
 
 import com.br.TechMed.Enum.TipoUsuario;
+import com.br.TechMed.dto.request.cliente.ClienteRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +13,6 @@ import org.hibernate.validator.constraints.br.CPF;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -102,11 +102,23 @@ public class ClienteEntity {
         this.id = id;
     }
 
-    @PrePersist
-    @PreUpdate
-    private void calcularIdade() {
+    private Integer calcularIdade() {
         if (this.dataNascimento != null) {
-            this.idade = Period.between(this.dataNascimento, LocalDate.now()).getYears();
+            return Period.between(this.dataNascimento, LocalDate.now()).getYears();
         }
+        return null;
+    }
+
+    public ClienteEntity (ClienteRequest request){
+        this.login = request.getEmail();
+        this.nome = request.getNome();
+        this.sobrenome = request.getSobrenome();
+        this.email = request.getEmail();
+        this.cpf = request.getCpf();
+        this.celular = request.getCelular();
+        this.senha = request.getSenha();
+        this.dataNascimento = request.getDataNascimento();
+        this.tipoUsuario = TipoUsuario.PACIENTE;
+        this.idade = calcularIdade();
     }
 }

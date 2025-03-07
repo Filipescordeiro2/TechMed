@@ -82,6 +82,4 @@ public class admServiceImp implements AdmService {
         return adminEntity;
     }
 
-
-
 }

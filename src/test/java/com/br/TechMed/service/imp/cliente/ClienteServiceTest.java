@@ -1,6 +1,5 @@
 package com.br.TechMed.service.imp.cliente;
 
-import com.br.TechMed.dto.Clinica.EnderecoClienteDTO;
 import com.br.TechMed.dto.cliente.ClienteDTO;
 import com.br.TechMed.dto.cliente.LoginSenhaClienteDTO;
 import com.br.TechMed.entity.cliente.ClienteEntity;
@@ -24,13 +23,13 @@ import static org.mockito.Mockito.*;
  * Utiliza JUnit 5 e Mockito para testar os métodos de ClienteServiceImp.
  */
 @ExtendWith(MockitoExtension.class)
-public class ClienteServiceImpTest {
+public class ClienteServiceTest {
 
     @Mock
     private ClienteRepository clienteRepository;
 
     @InjectMocks
-    private ClienteServiceImp clienteService;
+    private ClienteService clienteService;
 
     private ClienteDTO clienteDTO;
     private ClienteEntity clienteEntity;

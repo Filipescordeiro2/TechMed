@@ -1,4 +1,4 @@
-package com.br.TechMed.dto.Clinica;
+package com.br.TechMed.dto.request.cliente;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -8,9 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EnderecoClienteDTO {
-
-    private Long id;
+public class EnderecoClienteRequest {
 
     @NotNull(message = "CEP é obrigatório")
     private String cep;
@@ -34,5 +32,4 @@ public class EnderecoClienteDTO {
 
     @NotNull(message = "País é obrigatório")
     private String pais;
-
 }
