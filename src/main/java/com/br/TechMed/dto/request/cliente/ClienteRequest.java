@@ -1,6 +1,5 @@
-package com.br.TechMed.dto.cliente;
+package com.br.TechMed.dto.request.cliente;
 
-import com.br.TechMed.dto.Clinica.EnderecoClienteDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -10,12 +9,11 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteDTO {
-
-    private Long id;
+public class ClienteRequest {
 
     @NotNull(message = "Senha é obrigatória")
     private String senha;
@@ -36,10 +34,8 @@ public class ClienteDTO {
 
     private String celular;
 
-    private EnderecoClienteDTO enderecoCliente;
+    private EnderecoClienteRequest enderecoCliente;
 
-    private LocalDate dataNascimento; // Adicione este campo
-    private Integer idade;
-
+    private LocalDate dataNascimento;
 
 }

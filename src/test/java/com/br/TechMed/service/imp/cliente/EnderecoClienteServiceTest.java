@@ -1,6 +1,5 @@
 package com.br.TechMed.service.imp.cliente;
 
-import com.br.TechMed.dto.Clinica.EnderecoClienteDTO;
 import com.br.TechMed.entity.cliente.EnderecoClienteEntity;
 import com.br.TechMed.exception.RegraDeNegocioException;
 import com.br.TechMed.repository.cliente.EnderecoClienteRepository;
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.*;
  * Utiliza JUnit 5 e Mockito para testar os métodos de EnderecoClienteServiceImp.
  */
 @ExtendWith(MockitoExtension.class)
-public class EnderecoClienteServiceImpTest {
+public class EnderecoClienteServiceTest {
 
     @Mock
     private EnderecoClienteRepository enderecoClienteRepository;

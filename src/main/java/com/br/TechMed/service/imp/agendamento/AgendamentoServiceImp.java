@@ -1,6 +1,5 @@
 package com.br.TechMed.service.imp.agendamento;
 
-import com.br.TechMed.Enum.Especialidades;
 import com.br.TechMed.Enum.StatusAgenda;
 import com.br.TechMed.Enum.StatusUsuario;
 import com.br.TechMed.dto.agendamento.AgendamentoDTO;
@@ -22,8 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 

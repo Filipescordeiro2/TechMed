@@ -1,6 +1,5 @@
 package com.br.TechMed.dto.cliente;
 
-import com.br.TechMed.dto.Clinica.EnderecoClienteDTO;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

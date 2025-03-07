@@ -2,8 +2,6 @@ package com.br.TechMed.controller.adm;
 
 import com.br.TechMed.dto.adm.AdminDTO;
 import com.br.TechMed.dto.adm.LoginSenhaAdminDTO;
-import com.br.TechMed.dto.cliente.ClienteDTO;
-import com.br.TechMed.dto.cliente.LoginSenhaClienteDTO;
 import com.br.TechMed.service.servicos.adm.AdmService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
