@@ -1,17 +1,27 @@
 package com.br.TechMed.utils.utilitaria;
 
 import com.br.TechMed.Enum.Especialidades;
+import com.br.TechMed.Enum.Jornada;
 import com.br.TechMed.Enum.StatusAgenda;
 import com.br.TechMed.Enum.StatusUsuario;
+import com.br.TechMed.dto.agenda.AgendaDTO;
+import com.br.TechMed.dto.request.Agenda.AgendaRequest;
+import com.br.TechMed.dto.response.Agenda.AgendaResponse;
 import com.br.TechMed.dto.response.Profissional.AgendaDetalhadaResponse;
 import com.br.TechMed.entity.agenda.AgendaEntity;
+import com.br.TechMed.entity.clinica.ClinicaEntity;
+import com.br.TechMed.entity.profissional.EspecialidadeProfissionalEntity;
+import com.br.TechMed.entity.profissional.ProfissionalEntity;
 import com.br.TechMed.exception.RegraDeNegocioException;
+import com.br.TechMed.repository.agenda.AgendaRepository;
 import com.br.TechMed.repository.profissional.ProfissionalRepository;
+import com.br.TechMed.utils.validation.AgendaValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,8 +30,16 @@ import java.util.stream.Collectors;
 public class AgendaUtils {
 
     private final ProfissionalRepository profissionalRepository;
+    private final AgendaValidation validation;
+    private final AgendaRepository agendaRepository;
 
-
+    public List<AgendaResponse> convertToResponse(List<AgendaEntity> agendaEntities) {
+        List<AgendaResponse> responseList = new ArrayList<>();
+        for (AgendaEntity entity : agendaEntities) {
+            responseList.add(new AgendaResponse("Success", entity.getHora(), entity.getData(), entity.getJornada(), entity.getStatusAgenda()));
+        }
+        return responseList;
+    }
 
     public static List<AgendaEntity> filterAgendasByProfissional(List<AgendaEntity> agendas, Long profissionalId, ProfissionalRepository profissionalRepository) {
         if (profissionalId != null) {
@@ -67,5 +85,28 @@ public class AgendaUtils {
                 String.valueOf(agenda.getEspecialidadeProfissionalEntity().getEspecialidades()),
                 agenda.getEspecialidadeProfissionalEntity().getDescricaoEspecialidade()
         );
+    }
+
+    public List<AgendaEntity> gerarHorarios(ProfissionalEntity profissional,
+                                            ClinicaEntity clinica,
+                                            EspecialidadeProfissionalEntity especialidade,
+                                            LocalDate data, LocalTime inicio,
+                                            LocalTime fim, int intervaloMinutos, Jornada jornada) {
+        List<AgendaEntity> horarios = new ArrayList<>();
+        LocalTime horarioAtual = inicio;
+        while (horarioAtual.isBefore(fim)) {
+            AgendaEntity entity = new AgendaEntity();
+            entity.setProfissional(profissional);
+            entity.setClinicaEntity(clinica);
+            entity.setEspecialidadeProfissionalEntity(especialidade);
+            entity.setData(data);
+            entity.setHora(horarioAtual);
+            entity.setJornada(jornada);
+            entity.setStatusAgenda(StatusAgenda.ABERTO);
+
+            horarios.add(entity);
+            horarioAtual = horarioAtual.plusMinutes(intervaloMinutos);
+        }
+        return horarios;
     }
 }
