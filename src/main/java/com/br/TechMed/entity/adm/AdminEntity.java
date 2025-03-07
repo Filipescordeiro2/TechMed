@@ -1,6 +1,7 @@
 package com.br.TechMed.entity.adm;
 
 import com.br.TechMed.Enum.TipoUsuario;
+import com.br.TechMed.dto.request.Adm.AdminRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -52,4 +53,15 @@ public class AdminEntity {
     @Column(name = "tipo_usuario")
     @Enumerated(EnumType.STRING)
     private TipoUsuario tipoUsuario;
+
+    public AdminEntity (AdminRequest request){
+        this.login = request.getEmail();
+        this.senha = request.getSenha();
+        this.nome = request.getNome();
+        this.sobrenome = request.getSobrenome();
+        this.email = request.getEmail();
+        this.cpf = request.getCpf();
+        this.celular = request.getCelular();
+        this.tipoUsuario = TipoUsuario.ADMIN;
+    }
 }

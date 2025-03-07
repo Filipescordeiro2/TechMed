@@ -1,13 +1,14 @@
 package com.br.TechMed.entity.cliente;
 
 import com.br.TechMed.Enum.TipoUsuario;
-import com.br.TechMed.dto.request.cliente.ClienteRequest;
+import com.br.TechMed.dto.request.Cliente.ClienteRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.hibernate.validator.constraints.br.CPF;
 
 import java.time.LocalDate;
@@ -96,6 +97,7 @@ public class ClienteEntity {
      * Lista de endereços do cliente.
      */
     @OneToMany(mappedBy = "clienteEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
     private List<EnderecoClienteEntity> enderecos = new ArrayList<>();
 
     public ClienteEntity(Long id) {

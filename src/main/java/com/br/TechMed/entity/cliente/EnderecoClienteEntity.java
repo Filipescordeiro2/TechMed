@@ -1,6 +1,6 @@
 package com.br.TechMed.entity.cliente;
 
-import com.br.TechMed.dto.request.cliente.EnderecoClienteRequest;
+import com.br.TechMed.dto.request.Cliente.EnderecoClienteRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

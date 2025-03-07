@@ -33,4 +33,12 @@ public class ClinicasAdminEntity {
 
     @Column(name = "ip_address", nullable = false)
     private String ipAddress;
+
+    public ClinicasAdminEntity(Long clinicaId, Long adminId, LocalDate dataCriacao, LocalTime horaCriacao, String ipAddress) {
+        this.clinicaId = clinicaId;
+        this.adminId = adminId;
+        this.dataCriacao = dataCriacao;
+        this.horaCriacao = horaCriacao;
+        this.ipAddress = ipAddress;
+    }
 }

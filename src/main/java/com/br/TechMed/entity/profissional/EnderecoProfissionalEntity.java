@@ -1,5 +1,6 @@
 package com.br.TechMed.entity.profissional;
 
+import com.br.TechMed.dto.request.Profissional.EnderecoProfissionalRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -77,5 +78,16 @@ public class EnderecoProfissionalEntity {
     @ManyToOne
     @JoinColumn(name = "profissional_id")
     private ProfissionalEntity profissionalEntity;
+
+    public EnderecoProfissionalEntity(EnderecoProfissionalRequest request){
+        this.cep = request.getCep();
+        this.logradouro = request.getLogradouro();
+        this.numero = request.getNumero();
+        this.complemento = request.getComplemento();
+        this.bairro = request.getBairro();
+        this.cidade = request.getCidade();
+        this.estado = request.getEstado();
+        this.pais = request.getPais();
+    }
 
 }

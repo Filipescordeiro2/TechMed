@@ -1,11 +1,13 @@
 package com.br.TechMed.controller.profissional;
 
-import com.br.TechMed.dto.agenda.AgendaDetalhadaDTO;
-import com.br.TechMed.dto.profissional.EspecialidadeProfissionalDTO;
-import com.br.TechMed.dto.profissional.LoginSenhaProfissionalDTO;
-import com.br.TechMed.dto.profissional.ProfissionalDTO;
-import com.br.TechMed.service.servicos.profissional.EspecialidadeProfissionalService;
-import com.br.TechMed.service.servicos.profissional.ProfissionalService;
+import com.br.TechMed.dto.request.Profissional.LoginSenhaProfissionalRequest;
+import com.br.TechMed.dto.request.Profissional.ProfissionalRequest;
+import com.br.TechMed.dto.response.Profissional.AgendaDetalhadaResponse;
+import com.br.TechMed.dto.response.Profissional.EspecialidadeProfissionalResponse;
+import com.br.TechMed.dto.response.Profissional.ProfissionalRegisterResponse;
+import com.br.TechMed.dto.response.Profissional.ProfissionalResponse;
+import com.br.TechMed.service.profissional.EspecialidadeProfissionalService;
+import com.br.TechMed.service.profissional.ProfissionalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +18,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Controlador responsável por gerenciar as operações relacionadas aos profissionais no sistema.
- */
+
 @RestController
-    @RequestMapping("/profissionais")
+@RequestMapping("/profissionais")
 @CrossOrigin(origins = "http://localhost:3000") // Permite apenas o domínio do frontend
 public class ProfissionalController {
 
@@ -30,54 +30,33 @@ public class ProfissionalController {
     @Autowired
     private EspecialidadeProfissionalService especialidadeProfissionalService;
 
-    /**
-     * Cria um novo profissional.
-     *
-     * @param profissionalDTO Dados do profissional a ser criado.
-     * @return Dados do profissional criado.
-     */
     @PostMapping
-    public ResponseEntity<ProfissionalDTO> createProfissional(@RequestBody ProfissionalDTO profissionalDTO) {
-        ProfissionalDTO createdProfissional = profissionalService.cadastrarProfissional(profissionalDTO);
+    public ResponseEntity<ProfissionalRegisterResponse> createProfissional(@RequestBody ProfissionalRequest request) {
+        var createdProfissional = profissionalService.cadastrarProfissional(request);
         return ResponseEntity.ok(createdProfissional);
     }
 
-    /**
-     * Autentica um profissional pelo login e senha.
-     *
-     * @param loginSenhaDTO Dados de login e senha do profissional.
-     * @return os dados do profissional autenticado.
-     */
     @PostMapping("/autenticar")
-    public ResponseEntity<ProfissionalDTO> autenticarProfissional(@RequestBody LoginSenhaProfissionalDTO loginSenhaDTO) {
-        ProfissionalDTO profissionalAutenticado = profissionalService.autenticarProfissional(loginSenhaDTO);
+    public ResponseEntity<ProfissionalResponse> autenticarProfissional(@RequestBody LoginSenhaProfissionalRequest loginSenhaDTO) {
+        var profissionalAutenticado = profissionalService.autenticarProfissional(loginSenhaDTO);
         return ResponseEntity.ok(profissionalAutenticado);
     }
 
-    /**
-     * Recupera a agenda de um profissional.
-     *
-     * @param profissionalId o ID do profissional.
-     * @return a lista de agendas do profissional.
-     */
     @GetMapping("/agenda")
-    public ResponseEntity<List<AgendaDetalhadaDTO>> getAgendaByProfissional(
-            @RequestParam(required = false) Long profissionalId,
-            @RequestParam Long clinicaId,
-            @RequestParam(required = false) String statusAgenda,
-            @RequestParam(required = false) LocalDate data,
-            @RequestParam(required = false) LocalTime hora,
-            @RequestParam(required = false) String nomeProfissional,
-            @RequestParam(required = false) String nomeEspecialidade) {
-        List<AgendaDetalhadaDTO> agenda = profissionalService.getAgendaByProfissional(profissionalId, clinicaId, statusAgenda, data, hora, nomeProfissional,nomeEspecialidade);
+    public ResponseEntity<List<AgendaDetalhadaResponse>> getAgendaByProfissional(@RequestParam(required = false) Long profissionalId,
+                                                                                 @RequestParam Long clinicaId,
+                                                                                 @RequestParam(required = false) String statusAgenda,
+                                                                                 @RequestParam(required = false) LocalDate data,
+                                                                                 @RequestParam(required = false) LocalTime hora,
+                                                                                 @RequestParam(required = false) String nomeProfissional,
+                                                                                 @RequestParam(required = false) String nomeEspecialidade) {
+
+        List<AgendaDetalhadaResponse> agenda = profissionalService.getAgendaByProfissional(profissionalId, clinicaId,
+                statusAgenda, data, hora, nomeProfissional, nomeEspecialidade);
         return ResponseEntity.ok(agenda);
     }
 
-    /**
-     * Retorna a quantidade de profissionais cadastrados.
-     *
-     * @return a quantidade de profissionais cadastrados
-     */
+
     @GetMapping("/contar")
     public ResponseEntity<Long> contarProfissionais() {
         long quantidadeProfissionais = profissionalService.contarProfissionais();
@@ -90,19 +69,14 @@ public class ProfissionalController {
     }
 
     @GetMapping("/especialidadesProfissional")
-    public ResponseEntity<List<EspecialidadeProfissionalDTO>> buscarEspecialidadePorProfissionalId(@RequestParam Long profissionalId) {
-        List<EspecialidadeProfissionalDTO> especialidades = especialidadeProfissionalService.buscarEspecialidadePorProfissionalId(profissionalId);
+    public ResponseEntity<List<EspecialidadeProfissionalResponse>> buscarEspecialidadePorProfissionalId(@RequestParam Long profissionalId) {
+        List<EspecialidadeProfissionalResponse> especialidades = especialidadeProfissionalService.buscarEspecialidadePorProfissionalId(profissionalId);
         return ResponseEntity.ok(especialidades);
     }
 
-    /**
-     * Lista todos os profissionais ativos.
-     *
-     * @return a lista de profissionais ativos
-     */
     @GetMapping("/ativos")
-    public ResponseEntity<List<ProfissionalDTO>> listarProfissionaisAtivos() {
-        List<ProfissionalDTO> profissionaisAtivos = profissionalService.listarProfissionaisAtivos();
+    public ResponseEntity<List<ProfissionalResponse>> listarProfissionaisAtivos() {
+        List<ProfissionalResponse> profissionaisAtivos = profissionalService.listarProfissionaisAtivos();
         return ResponseEntity.ok(profissionaisAtivos);
     }
 
