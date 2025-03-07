@@ -33,4 +33,12 @@ public class ProfissionaisAdminEntity {
 
     @Column(name = "ip_address", nullable = false)
     private String ipAddress;
+
+    public ProfissionaisAdminEntity(Long profissionalId, Long adminId, LocalDate dataCriacao, LocalTime horaCriacao, String ipAddress) {
+        this.profissionalId = profissionalId;
+        this.adminId = adminId;
+        this.dataCriacao = dataCriacao;
+        this.horaCriacao = horaCriacao;
+        this.ipAddress = ipAddress;
+    }
 }

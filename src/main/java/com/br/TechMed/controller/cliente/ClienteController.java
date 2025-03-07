@@ -1,10 +1,10 @@
 package com.br.TechMed.controller.cliente;
 
-import com.br.TechMed.dto.request.cliente.ClienteRequest;
-import com.br.TechMed.dto.request.cliente.LoginSenhaClienteResquest;
+import com.br.TechMed.dto.request.Cliente.ClienteRequest;
+import com.br.TechMed.dto.request.Cliente.LoginSenhaClienteResquest;
 import com.br.TechMed.dto.response.cliente.ClienteRegisterResponse;
 import com.br.TechMed.dto.response.cliente.ClienteResponse;
-import com.br.TechMed.service.imp.cliente.ClienteService;
+import com.br.TechMed.service.cliente.ClienteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

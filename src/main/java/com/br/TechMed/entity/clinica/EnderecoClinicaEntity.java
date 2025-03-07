@@ -1,5 +1,7 @@
 package com.br.TechMed.entity.clinica;
 
+import com.br.TechMed.dto.request.Cliente.EnderecoClienteRequest;
+import com.br.TechMed.dto.request.Clinica.EnderecoClinicaRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -84,4 +86,15 @@ public class EnderecoClinicaEntity {
     @ManyToOne
     @JoinColumn(name = "clinica_id")
     private ClinicaEntity clinicaEntity;
+
+    public EnderecoClinicaEntity(EnderecoClinicaRequest request){
+        this.cep = request.getCep();
+        this.logradouro = request.getLogradouro();
+        this.numero = request.getNumero();
+        this.complemento = request.getComplemento();
+        this.bairro = request.getBairro();
+        this.cidade = request.getCidade();
+        this.estado = request.getEstado();
+        this.pais = request.getPais();
+    }
 }

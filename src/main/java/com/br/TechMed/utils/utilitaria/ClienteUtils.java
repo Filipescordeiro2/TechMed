@@ -17,7 +17,6 @@ import java.time.LocalDateTime;
 public class ClienteUtils {
 
     public ClienteResponse convertClientResponse(ClienteEntity clienteEntity) {
-        log.info("Converting ClienteEntity to ClienteResponse --> {}", clienteEntity);
         ClienteResponse response = ClienteResponse.builder()
                 .id(clienteEntity.getId())
                 .nome(clienteEntity.getNome())
@@ -29,12 +28,10 @@ public class ClienteUtils {
                 .idade(clienteEntity.getIdade())
                 .enderecoCliente(convertEnderecoResponse(clienteEntity.getEnderecos().get(0)))
                 .build();
-        log.info("Converted ClienteResponse --> {}", response);
         return response;
     }
 
     public EnderecoClienteResponse convertEnderecoResponse(EnderecoClienteEntity enderecoEntity) {
-        log.info("Converting EnderecoClienteEntity to EnderecoClienteResponse --> {}", enderecoEntity);
         EnderecoClienteResponse response = EnderecoClienteResponse.builder()
                 .id(enderecoEntity.getId())
                 .cep(enderecoEntity.getCep())
@@ -46,17 +43,14 @@ public class ClienteUtils {
                 .estado(enderecoEntity.getEstado())
                 .pais(enderecoEntity.getPais())
                 .build();
-        log.info("Converted EnderecoClienteResponse --> {}", response);
         return response;
     }
 
     public ClienteRegisterResponse convertClientRegisterResponse(String message) {
-        log.info("Creating ClienteRegisterResponse with message --> {}", message);
         ClienteRegisterResponse response = ClienteRegisterResponse.builder()
                 .message(message)
                 .createdDate(LocalDateTime.now())
                 .build();
-        log.info("Created ClienteRegisterResponse --> {}", response);
         return response;
     }
 }

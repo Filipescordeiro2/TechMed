@@ -1,8 +1,10 @@
 package com.br.TechMed.controller.adm;
 
-import com.br.TechMed.dto.adm.AdminDTO;
-import com.br.TechMed.dto.adm.LoginSenhaAdminDTO;
-import com.br.TechMed.service.servicos.adm.AdmService;
+import com.br.TechMed.dto.request.Adm.AdminRequest;
+import com.br.TechMed.dto.request.Adm.LoginSenhaAdminRequest;
+import com.br.TechMed.dto.response.adm.AdminRegisterResponse;
+import com.br.TechMed.dto.response.adm.AdminResponse;
+import com.br.TechMed.service.adm.AdmService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,30 +18,17 @@ import org.springframework.web.bind.annotation.*;
 public class AdmController {
 
     @Autowired
-    private AdmService admService;
-
-    /**
-     * Cadastra um novo admin no sistema.
-     *
-     * @param adminDTO os dados do admin a ser cadastrado
-     * @return os dados do admin cadastrado
-     */
+    private final AdmService admService;
 
     @PostMapping("/cadastrarAdmin")
-    public ResponseEntity<AdminDTO> cadastrarAdmin(@Valid @RequestBody AdminDTO adminDTO) {
-        AdminDTO novoAdmin = admService.cadastrarAdmin(adminDTO);
+    public ResponseEntity<AdminRegisterResponse> cadastrarAdmin(@Valid @RequestBody AdminRequest request) {
+        var novoAdmin = admService.cadastrarAdmin(request);
         return ResponseEntity.ok(novoAdmin);
     }
 
-    /**
-     * Autentica um cliente pelo login e senha.
-     *
-     * @param loginSenhaAdminDTO os dados de login e senha do cliente
-     * @return os dados do cliente autenticado
-     */
     @PostMapping("/autenticar")
-    public ResponseEntity<AdminDTO> autenticarCliente(@RequestBody LoginSenhaAdminDTO loginSenhaAdminDTO) {
-        AdminDTO adminAutenticado = admService.autenticarAdmin(loginSenhaAdminDTO);
+    public ResponseEntity<AdminResponse> autenticarCliente(@RequestBody LoginSenhaAdminRequest request) {
+        var adminAutenticado = admService.autenticarAdmin(request);
         return ResponseEntity.ok(adminAutenticado);
     }
 

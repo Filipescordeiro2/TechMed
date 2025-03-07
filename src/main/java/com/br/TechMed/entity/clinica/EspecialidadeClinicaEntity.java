@@ -1,6 +1,7 @@
 package com.br.TechMed.entity.clinica;
 
 import com.br.TechMed.Enum.Especialidades;
+import com.br.TechMed.dto.request.Clinica.EspecialidadeClinicaRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -55,4 +56,11 @@ public class EspecialidadeClinicaEntity {
     private void definirDescricao() {
         this.descricaoEspecialidade = Especialidades.getDescricao(this.especialidades);
     }
+
+    public EspecialidadeClinicaEntity(EspecialidadeClinicaRequest request) {
+        this.especialidades = request.getEspecialidades();
+        this.descricaoEspecialidade = request.getDescricaoEspecialidade();
+    }
+
+
 }

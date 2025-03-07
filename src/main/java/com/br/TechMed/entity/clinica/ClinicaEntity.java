@@ -2,6 +2,7 @@ package com.br.TechMed.entity.clinica;
 
 import com.br.TechMed.Enum.StatusUsuario;
 import com.br.TechMed.Enum.TipoUsuario;
+import com.br.TechMed.dto.request.Clinica.ClinicaRequest;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -50,7 +51,7 @@ public class ClinicaEntity {
     private String cnpj;
 
     @Enumerated(EnumType.STRING)
-    private StatusUsuario StatusClinica;
+    private StatusUsuario statusClinica;
 
     @Column(name = "senha_clinica")
     @Enumerated(EnumType.STRING)
@@ -64,4 +65,15 @@ public class ClinicaEntity {
 
     @OneToMany(mappedBy = "clinicaEntity", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProfissionaisClinicaEntity> profissionais = new ArrayList<>();
+
+    public ClinicaEntity(ClinicaRequest request){
+        this.nomeClinica = request.getNomeClinica();
+        this.descricaoClinica = request.getDescricaoClinica();
+        this.telefone = request.getTelefone();
+        this.celular = request.getCelular();
+        this.email = request.getEmail();
+        this.cnpj = request.getCnpj();
+        this.statusClinica = StatusUsuario.ATIVO;
+        this.tipoUsuario = TipoUsuario.CLINICA;
+    }
 }

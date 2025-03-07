@@ -2,6 +2,7 @@ package com.br.TechMed.entity.profissional;
 
 import com.br.TechMed.Enum.StatusUsuario;
 import com.br.TechMed.Enum.TipoUsuario;
+import com.br.TechMed.dto.request.Profissional.ProfissionalRequest;
 import com.br.TechMed.entity.clinica.ProfissionaisClinicaEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -120,6 +121,21 @@ public class ProfissionalEntity {
 
     public ProfissionalEntity(Long id) {
         this.id = id;
+    }
+
+    public ProfissionalEntity(ProfissionalRequest request){
+        this.login = request.getEmail();
+        this.senha = request.getSenha();
+        this.nome = request.getNome();
+        this.sobrenome = request.getSobrenome();
+        this.email = request.getEmail();
+        this.cpf = request.getCpf();
+        this.orgaoRegulador = request.getOrgaoRegulador();
+        this.numeroRegistro = request.getNumeroRegistro();
+        this.ufOrgaoRegulador = request.getUfOrgaoRegulador();
+        this.celular = request.getCelular();
+        this.StatusProfissional = StatusUsuario.ATIVO;
+        this.tipoUsuario = TipoUsuario.MEDICO;
     }
 
 }
