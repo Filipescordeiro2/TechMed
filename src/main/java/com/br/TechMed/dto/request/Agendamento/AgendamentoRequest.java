@@ -1,15 +1,14 @@
-package com.br.TechMed.dto.agendamento;
+package com.br.TechMed.dto.request.Agendamento;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class AgendamentoDTO {
+@AllArgsConstructor
+public class AgendamentoRequest {
 
-    private Long id;
     private Long agendaId;
     private Long clienteId;
 }

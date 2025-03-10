@@ -1,7 +1,8 @@
 package com.br.TechMed.controller.prontuarioMedico;
 
-import com.br.TechMed.dto.prontuarioMedico.*;
-import com.br.TechMed.service.servicos.prontuarioMedicoService.ProntuarioMedicoService;
+import com.br.TechMed.dto.request.prontuarioMedico.ProtuarioMedicoRequest;
+import com.br.TechMed.dto.response.ProntuarioMedico.*;
+import com.br.TechMed.service.ProntuarioMedico.ProntuarioMedicoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,36 +19,33 @@ public class ProntuarioMedicoController {
     private ProntuarioMedicoService prontuarioMedicoService;
 
     @PostMapping
-    public ResponseEntity<ProtuarioMedicoDTO> saveProntuario(@RequestBody ProtuarioMedicoDTO prontuarioMedicoDTO) {
-        ProtuarioMedicoDTO savedProntuario = prontuarioMedicoService.save(prontuarioMedicoDTO);
+    public ResponseEntity<ProtuarioMedicoResponse> saveProntuario(@RequestBody ProtuarioMedicoRequest request) {
+        ProtuarioMedicoResponse savedProntuario = prontuarioMedicoService.save(request);
         return ResponseEntity.ok(savedProntuario);
     }
 
     @GetMapping("/cliente")
-    public ResponseEntity<List<ProtuarioMedicoDetalhadoDTO>> getProntuarioByClienteId(@RequestParam Long clienteId) {
-        List<ProtuarioMedicoDetalhadoDTO> prontuarioMedicoDTOs = prontuarioMedicoService.findByClienteId(clienteId);
-        if (prontuarioMedicoDTOs.isEmpty()) {
+    public ResponseEntity<List<ProtuarioMedicoDetalhadoResponse>> getProntuarioByClienteId(@RequestParam Long clienteId) {
+        List<ProtuarioMedicoDetalhadoResponse> prontuarioMedicoResponses = prontuarioMedicoService.findByClienteId(clienteId);
+        if (prontuarioMedicoResponses.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(prontuarioMedicoDTOs);
+        return ResponseEntity.ok(prontuarioMedicoResponses);
     }
 
     @GetMapping("/cliente/cpf")
-    public ResponseEntity<List<ProtuarioMedicoDetalhadoDTO>> getProntuarioByCpf(@RequestParam String cpf) {
-        List<ProtuarioMedicoDetalhadoDTO> prontuarioMedicoDTOs = prontuarioMedicoService.findByCpf(cpf);
-        if (prontuarioMedicoDTOs.isEmpty()) {
+    public ResponseEntity<List<ProtuarioMedicoDetalhadoResponse>> getProntuarioByCpf(@RequestParam String cpf) {
+        List<ProtuarioMedicoDetalhadoResponse> prontuarioMedicoResponses = prontuarioMedicoService.findByCpf(cpf);
+        if (prontuarioMedicoResponses.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok(prontuarioMedicoDTOs);
+        return ResponseEntity.ok(prontuarioMedicoResponses);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<ProtuarioMedicoDetalhadoDTO>> getProntuarioById(@PathVariable Long id) {
-        List<ProtuarioMedicoDetalhadoDTO> prontuarioMedicoDTOs = prontuarioMedicoService.findById(id);
-        if (prontuarioMedicoDTOs.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(prontuarioMedicoDTOs);
+    public ResponseEntity<ProtuarioMedicoDetalhadoResponse> getProntuarioById(@PathVariable Long id) {
+        ProtuarioMedicoDetalhadoResponse prontuarioMedicoResponse = prontuarioMedicoService.findById(id);
+        return ResponseEntity.ok(prontuarioMedicoResponse);
     }
 
     @GetMapping("/contarExames")
@@ -69,23 +67,22 @@ public class ProntuarioMedicoController {
     }
 
     @GetMapping("/examesPorProfissionalEData")
-    public ResponseEntity<List<ExamesClienteDTO>> getExamesByProfissionalAndDataConsulta(@RequestParam Long profissionalId, @RequestParam LocalDate dataConsulta) {
-        List<ExamesClienteDTO> exames = prontuarioMedicoService.findExamesByProfissionalAndDataConsulta(profissionalId, dataConsulta);
+    public ResponseEntity<List<ExamesClienteResponse>> getExamesByProfissionalAndDataConsulta(@RequestParam Long profissionalId, @RequestParam LocalDate dataConsulta) {
+        List<ExamesClienteResponse> exames = prontuarioMedicoService.findExamesByProfissionalAndDataConsulta(profissionalId, dataConsulta);
         return ResponseEntity.ok(exames);
     }
 
     @GetMapping("/procedimentosPorProfissionalEData")
-    public ResponseEntity<List<ProcedimentosClienteDTO>> getProcedimentosByProfissionalAndDataConsulta(@RequestParam Long profissionalId, @RequestParam LocalDate dataConsulta) {
-        List<ProcedimentosClienteDTO> procedimentos = prontuarioMedicoService.findProcedimentosByProfissionalAndDataConsulta(profissionalId, dataConsulta);
+    public ResponseEntity<List<ProcedimentosClienteResponse>> getProcedimentosByProfissionalAndDataConsulta(@RequestParam Long profissionalId, @RequestParam LocalDate dataConsulta) {
+        List<ProcedimentosClienteResponse> procedimentos = prontuarioMedicoService.findProcedimentosByProfissionalAndDataConsulta(profissionalId, dataConsulta);
         return ResponseEntity.ok(procedimentos);
     }
 
     @GetMapping("/medicamentosPorProfissionalEData")
-    public ResponseEntity<List<MedicamentosClienteDTO>> getMedicamentosByProfissionalAndDataConsulta(@RequestParam Long profissionalId, @RequestParam LocalDate dataConsulta) {
-        List<MedicamentosClienteDTO> medicamentos = prontuarioMedicoService.findMedicamentosByProfissionalAndDataConsulta(profissionalId, dataConsulta);
+    public ResponseEntity<List<MedicamentosClienteResponse>> getMedicamentosByProfissionalAndDataConsulta(@RequestParam Long profissionalId, @RequestParam LocalDate dataConsulta) {
+        List<MedicamentosClienteResponse> medicamentos = prontuarioMedicoService.findMedicamentosByProfissionalAndDataConsulta(profissionalId, dataConsulta);
         return ResponseEntity.ok(medicamentos);
     }
-
 
     @GetMapping("/Count/examesPorProfissionalEData")
     public ResponseEntity<Long> countExamesByProfissionalAndDataConsultaBetweenAndClinicaId(@RequestParam Long profissionalId, @RequestParam LocalDate startDate, @RequestParam LocalDate endDate, @RequestParam Long clinicaId) {
@@ -104,6 +101,4 @@ public class ProntuarioMedicoController {
         long count = prontuarioMedicoService.countMedicamentosByProfissionalAndDataConsultaBetweenAndClinicaId(profissionalId, startDate, endDate, clinicaId);
         return ResponseEntity.ok(count);
     }
-
-
 }

@@ -1,4 +1,4 @@
-package com.br.TechMed.dto.prontuarioMedico;
+package com.br.TechMed.dto.request.prontuarioMedico;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,18 +10,16 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProtuarioMedicoDTO {
-    private Long id;
+public class ProtuarioMedicoRequest {
     private Long profissionalId;
-    private Long clienteId; // Adicione este campo
+    private Long clienteId;
     private Long clinicaId;
     private String descricao;
     private LocalDate dataConsulta;
-    private List<ExamesClienteDTO> exames;
-    private List<ProcedimentosClienteDTO> procedimentos;
-    private List<MedicamentosClienteDTO> medicamentos;
+    private List<ExamesClienteRequest> exames;
+    private List<ProcedimentosClienteRequest> procedimentos;
+    private List<MedicamentosClienteRequest> medicamentos;
     private List<String> observacoes;
     private String cpf;
-
 
 }
