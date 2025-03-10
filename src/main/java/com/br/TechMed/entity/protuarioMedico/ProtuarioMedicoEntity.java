@@ -1,5 +1,6 @@
 package com.br.TechMed.entity.protuarioMedico;
 
+import com.br.TechMed.dto.request.prontuarioMedico.ProtuarioMedicoRequest;
 import com.br.TechMed.entity.cliente.ClienteEntity;
 import com.br.TechMed.entity.clinica.ClinicaEntity;
 import com.br.TechMed.entity.profissional.ProfissionalEntity;
@@ -48,4 +49,15 @@ public class ProtuarioMedicoEntity {
 
     @Column(name = "observacoes")
     private List<String> observacoes;
+
+    public ProtuarioMedicoEntity(ProtuarioMedicoRequest request){
+        this.descricao = request.getDescricao();
+        this.dataConsulta = request.getDataConsulta();
+        this.cliente = new ClienteEntity();
+        this.cliente.setId(request.getClienteId());
+        this.clinica = new ClinicaEntity();
+        this.clinica.setId(request.getClinicaId());
+        this.profissional = new ProfissionalEntity();
+        this.profissional.setId(request.getProfissionalId());
+    }
 }

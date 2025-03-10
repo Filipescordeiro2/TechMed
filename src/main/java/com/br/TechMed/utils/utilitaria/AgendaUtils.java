@@ -4,8 +4,6 @@ import com.br.TechMed.Enum.Especialidades;
 import com.br.TechMed.Enum.Jornada;
 import com.br.TechMed.Enum.StatusAgenda;
 import com.br.TechMed.Enum.StatusUsuario;
-import com.br.TechMed.dto.agenda.AgendaDTO;
-import com.br.TechMed.dto.request.Agenda.AgendaRequest;
 import com.br.TechMed.dto.response.Agenda.AgendaResponse;
 import com.br.TechMed.dto.response.Profissional.AgendaDetalhadaResponse;
 import com.br.TechMed.entity.agenda.AgendaEntity;
