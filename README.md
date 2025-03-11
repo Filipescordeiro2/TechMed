@@ -9,7 +9,7 @@ TechMed é  gestor de clínicas médicas, oferecendo funcionalidades para agenda
 ![SQL Database](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white)
 
 ## 🏗️ Arquitetura usada
-A aplicação segue a arquitetura de microsserviços, permitindo escalabilidade e manutenção facilitada. Utiliza Spring Boot para a criação dos serviços RESTful.
+A aplicação segue a arquitetura em camadas, permitindo escalabilidade e manutenção facilitada. Utiliza Spring Boot para a criação dos serviços RESTful.
 
 ## 👥 Tipo de Usuários
 - **Administradores**: Gerenciam a clínica, médicos e pacientes.
