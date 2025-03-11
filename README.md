@@ -17,11 +17,10 @@ A aplicação segue a arquitetura em camadas, permitindo escalabilidade e manute
 - **Pacientes**: Agendam consultas e visualizam seus históricos.
 
 ##  Principais Funções
-- 📅 Agendamento de consultas
-- 👥 Gerenciamento de pacientes
-- 👨‍⚕️ Gerenciamento de médicos
-- 📋 Prontuário eletrônico
-- 🔔 Notificações e lembretes
+- [x] Agendamento de consultas
+- [x] Gerenciamento de pacientes
+- [x] Gerenciamento de médicos
+- [x] Prontuário eletrônico
 
 ##  Dependências usadas
 - Spring Boot Starter Data JPA
