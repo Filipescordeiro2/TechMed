@@ -1,29 +1,29 @@
 # MVP - TechMed
 
-## 📝 Descrição do projeto
+## Descrição do projeto
 TechMed é  gestor de clínicas médicas, oferecendo funcionalidades para agendamento de consultas, gerenciamento de pacientes, médicos e prontuários eletrônicos.
 
-## 🛠️ Tecnologias usadas
+## Tecnologias usadas
 ![Java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring%20Boot-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
 ![SQL Database](https://img.shields.io/badge/SQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=white)
 
-## 🏗️ Arquitetura usada
+## Arquitetura usada
 A aplicação segue a arquitetura em camadas, permitindo escalabilidade e manutenção facilitada. Utiliza Spring Boot para a criação dos serviços RESTful.
 
-## 👥 Tipo de Usuários
+## Tipo de Usuários
 - **Administradores**: Gerenciam a clínica, médicos e pacientes.
 - **Médicos**: Acessam e atualizam prontuários, gerenciam consultas.
 - **Pacientes**: Agendam consultas e visualizam seus históricos.
 
-## 🚀 Principais Funções
+##  Principais Funções
 - 📅 Agendamento de consultas
 - 👥 Gerenciamento de pacientes
 - 👨‍⚕️ Gerenciamento de médicos
 - 📋 Prontuário eletrônico
 - 🔔 Notificações e lembretes
 
-## 📦 Dependências usadas
+##  Dependências usadas
 - Spring Boot Starter Data JPA
 - Spring Boot Starter Validation
 - Spring Boot Starter Web
@@ -32,7 +32,7 @@ A aplicação segue a arquitetura em camadas, permitindo escalabilidade e manute
 - Lombok
 - Spring Boot Starter Test
 
-## 📚 Estrutura e responsabilidades
+##  Estrutura e responsabilidades
 
 ### `controller`
 Responsável por gerenciar as requisições HTTP e direcioná-las para os serviços apropriados. Contém as classes que definem os endpoints da API REST.
